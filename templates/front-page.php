@@ -13,6 +13,12 @@ $tpk_orszagok  = tpk_get_orszagok( 3 );
 $tpk_cikkek    = tpk_get_cikkek( 3 );
 $tpk_pontok    = tpk_miert_mi_pontok();
 
+$tpk_url_ajanlatok = tpk_ajanlatok_url();
+$tpk_url_uticelok  = tpk_uticelok_url();
+$tpk_url_utikalauz = tpk_utikalauz_url();
+$tpk_url_rolunk    = tpk_rolunk_url();
+$tpk_url_kapcsolat = tpk_kapcsolat_url();
+
 $tpk_tagline = get_bloginfo( 'description' );
 $tpk_title   = $tpk_tagline ? get_bloginfo( 'name' ) . ' – ' . $tpk_tagline : get_bloginfo( 'name' );
 ?><!DOCTYPE html>
@@ -35,10 +41,12 @@ $tpk_title   = $tpk_tagline ? get_bloginfo( 'name' ) . ' – ' . $tpk_tagline : 
             <span class="tpk-logo-text"><?php bloginfo( 'name' ); ?></span>
         </div>
         <div class="tpk-nav-menu">
-            <a class="tpk-nav-link" href="#offers">Ajánlatok</a>
-            <a class="tpk-nav-link" href="#destinations">Úticélok</a>
-            <a class="tpk-nav-link" href="#blog">Útikalauz</a>
-            <a class="tpk-nav-cta" href="#offers"><?php echo esc_html( apply_filters( 'tpk_nav_cta_szoveg', 'Ajánlatok böngészése' ) ); ?></a>
+            <a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_ajanlatok ); ?>">Ajánlatok</a>
+            <a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_uticelok ); ?>">Úticélok</a>
+            <a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_utikalauz ); ?>">Útikalauz</a>
+            <?php if ( $tpk_url_rolunk ) : ?><a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_rolunk ); ?>">Rólunk</a><?php endif; ?>
+            <?php if ( $tpk_url_kapcsolat ) : ?><a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_kapcsolat ); ?>">Kapcsolat</a><?php endif; ?>
+            <a class="tpk-nav-cta" href="<?php echo esc_url( $tpk_url_ajanlatok ); ?>"><?php echo esc_html( apply_filters( 'tpk_nav_cta_szoveg', 'Ajánlatok böngészése' ) ); ?></a>
         </div>
     </nav>
 
@@ -60,7 +68,7 @@ $tpk_title   = $tpk_tagline ? get_bloginfo( 'name' ) . ' – ' . $tpk_tagline : 
                 ) ); ?>
             </p>
             <div class="tpk-hero-actions">
-                <a class="tpk-btn-dark" href="#offers"><?php echo esc_html( apply_filters( 'tpk_hero_cta_szoveg', 'Nézd meg az ajánlatokat' ) ); ?></a>
+                <a class="tpk-btn-dark" href="<?php echo esc_url( $tpk_url_ajanlatok ); ?>"><?php echo esc_html( apply_filters( 'tpk_hero_cta_szoveg', 'Nézd meg az ajánlatokat' ) ); ?></a>
                 <span class="tpk-hero-note">Ingyenes · nincs regisztráció</span>
             </div>
         </div>
@@ -76,7 +84,7 @@ $tpk_title   = $tpk_tagline ? get_bloginfo( 'name' ) . ' – ' . $tpk_tagline : 
                 <p class="tpk-eyebrow">Kiemelt ajánlatok</p>
                 <h2 class="tpk-section-title">Ez a hét legjobb dobása</h2>
             </div>
-            <span class="tpk-section-link">Összes ajánlat →</span>
+            <a class="tpk-section-link" href="<?php echo esc_url( $tpk_url_ajanlatok ); ?>">Összes ajánlat →</a>
         </div>
 
         <?php if ( $tpk_ajanlatok instanceof WP_Query && $tpk_ajanlatok->have_posts() ) : ?>
@@ -192,7 +200,7 @@ $tpk_title   = $tpk_tagline ? get_bloginfo( 'name' ) . ' – ' . $tpk_tagline : 
                     <p class="tpk-eyebrow">Útikalauz</p>
                     <h2 class="tpk-section-title">Olvasnivaló indulás előtt</h2>
                 </div>
-                <span class="tpk-section-link">Az összes cikk →</span>
+                <a class="tpk-section-link" href="<?php echo esc_url( $tpk_url_utikalauz ); ?>">Az összes cikk →</a>
             </div>
             <div class="tpk-grid-3">
                 <?php while ( $tpk_cikkek->have_posts() ) : $tpk_cikkek->the_post();
@@ -232,7 +240,7 @@ $tpk_title   = $tpk_tagline ? get_bloginfo( 'name' ) . ' – ' . $tpk_tagline : 
                     <a class="tpk-social-btn" href="<?php echo esc_url( $tpk_social['facebook'] ); ?>" aria-label="Facebook"><span class="tpk-social-icon-facebook"></span></a>
                 <?php endif; ?>
             </div>
-            <a class="tpk-btn-accent tpk-btn-accent--cta" href="#offers"><?php echo esc_html( apply_filters( 'tpk_zaro_cta_gomb_szoveg', 'Nézd meg az összes ajánlatot' ) ); ?></a>
+            <a class="tpk-btn-accent tpk-btn-accent--cta" href="<?php echo esc_url( $tpk_url_ajanlatok ); ?>"><?php echo esc_html( apply_filters( 'tpk_zaro_cta_gomb_szoveg', 'Nézd meg az összes ajánlatot' ) ); ?></a>
         </div>
     </section>
 

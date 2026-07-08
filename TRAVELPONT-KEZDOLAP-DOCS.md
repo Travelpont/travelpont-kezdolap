@@ -1,6 +1,6 @@
 # Travelpont Kezdőoldal plugin – dokumentáció
 
-> Verzió: 1.1.0 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
+> Verzió: 1.2.0 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
 > követi (`D:\travelpont.hu\_Saját_pluginek\`)
 > SZABÁLY: minden módosításkor verziót emelünk a fő fájl fejlécében
 > (cache-buster + követhetőség).
@@ -11,7 +11,8 @@ A jóváhagyott kezdőoldal-mockup (`Travelpont - kezdőoldal mockup.html`)
 pixelpontos megvalósítása, valós adatokkal feltöltve:
 
 - **Navigáció** – logó (CSS-ből épített boarding-pass jelvény, sárga
-  repülő-ikonnal) + `#offers` / `#destinations` / `#blog` horgony-linkek.
+  repülő-ikonnal) + linkek az önálló Ajánlatok/Úticélok/Útikalauz (és ha
+  léteznek, Rólunk/Kapcsolat) Oldalakra – lásd "Al-oldalak linkjei" lejjebb.
 - **Hero** – statikus szöveg + kép-helyfoglaló (nincs még hero kép).
 - **Kiemelt ajánlatok** – a `ajanlat` CPT-ből (Travelpont Ajánlatok plugin),
   max. 6 db, lejárt ajánlatok nélkül, kártyánként külön repjegy-ár /
@@ -73,6 +74,41 @@ Travelpont Ajánlatok plugin `fields.php`-ja két új mezőt kapott:
 ("Ár – összesített") – ha üresen hagyod, a `tpa_teljes_ar()` függvény a
 repjegy+szállás összegét adja vissza helyette. Részletek:
 `travelpont-ajanlatok/TRAVELPONT-AJANLATOK-DOCS.md`.
+
+## Al-oldalak linkjei (nav, "Összes ajánlat →" stb.)
+
+A weboldal végleges oldaltérképe (`_Dokumentumok\sitemap.md`) különálló
+Oldalakat ír elő: `/ajanlatok/`, `/uticelok/`, `/utikalauz/` (Bejegyzések
+oldal), `/rolunk/`, `/kapcsolat/`. A kezdőlap sablon ezekre linkel a nav-ban,
+a hero/záró CTA gombokban és a szekciók "Összes X →" linkjeiben –
+`includes/content-helpers.php` `tpk_ajanlatok_url()` / `tpk_uticelok_url()` /
+`tpk_utikalauz_url()` / `tpk_rolunk_url()` / `tpk_kapcsolat_url()`
+függvényein keresztül.
+
+Ezek `get_page_by_path()`-tal keresik meg a megfelelő slug-ú Oldalt (alap
+slugok: `ajanlatok`, `uticelok`, `utikalauz`, `rolunk`, `kapcsolat` – a
+`tpk_utikalauz_url()` előbb a WP natív "Bejegyzések oldala" beállítást
+(`page_for_posts`) nézi meg). Ha egy Oldal még nem létezik:
+- Ajánlatok/Úticélok/Útikalauz esetén a régi `#offers`/`#destinations`/`#blog`
+  horgony-linkre esik vissza (a plugin friss telepítésen is működik, mielőtt
+  az admin létrehozná az al-oldalakat).
+- Rólunk/Kapcsolat esetén egyszerűen nem jelenik meg a nav-linkjük.
+
+A slugok kódból felülírhatók (pl. ha más néven hozod létre az Oldalt):
+`tpk_ajanlatok_oldal_slug`, `tpk_uticelok_oldal_slug`,
+`tpk_utikalauz_oldal_slug`, `tpk_rolunk_oldal_slug`,
+`tpk_kapcsolat_oldal_slug` filterekkel.
+
+**FONTOS**: az `/ajanlatok/`, `/uticelok/`, `/utikalauz/`, `/rolunk/`,
+`/kapcsolat/` Oldalak létrehozása és a WP "Beállítások → Olvasás" alatti
+Kezdőlap/Bejegyzések-oldal beállítás admin feladat, ez a plugin nem hozza
+létre őket. **Soha ne állítsd az Ajánlatok (vagy bármelyik tényleges
+tartalom-)Oldalt a WP "Kezdőlap"-jának** – a WP a kezdőlapként beállított
+Oldal saját URL-jét automatikusan a gyökérre (`/`) irányítja át
+(`redirect_canonical()`), ami ellopná az adott Oldal saját URL-jét. Ehelyett
+egy külön, üres "technikai" Oldalt válassz Kezdőlapnak (a
+`travelpont-kezdolap` úgyis felülírja a gyökeret, a kiválasztott Oldal
+tartalma sosem látszik).
 
 ## Admin szerkesztés (kód nélkül)
 

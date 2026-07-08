@@ -95,3 +95,40 @@ function tpk_ajanlat_cimke( $post_id ) {
     if ( ! $terms || is_wp_error( $terms ) ) return '';
     return current( $terms )->name;
 }
+
+// ── Al-oldalak URL-jei – ha a megfelelő Oldal még nincs létrehozva, a nav       ──
+// ── horgony-linkre esik vissza, hogy a plugin ne törjön el nélküle ────────────
+function tpk_ajanlatok_url() {
+    $slug = apply_filters( 'tpk_ajanlatok_oldal_slug', 'ajanlatok' );
+    $page = get_page_by_path( $slug );
+    return $page ? get_permalink( $page ) : '#offers';
+}
+
+function tpk_uticelok_url() {
+    $slug = apply_filters( 'tpk_uticelok_oldal_slug', 'uticelok' );
+    $page = get_page_by_path( $slug );
+    return $page ? get_permalink( $page ) : '#destinations';
+}
+
+function tpk_utikalauz_url() {
+    $page_for_posts = (int) get_option( 'page_for_posts' );
+    if ( $page_for_posts ) return get_permalink( $page_for_posts );
+
+    $slug = apply_filters( 'tpk_utikalauz_oldal_slug', 'utikalauz' );
+    $page = get_page_by_path( $slug );
+    return $page ? get_permalink( $page ) : '#blog';
+}
+
+// ── Rólunk / Kapcsolat – nincs horgony-fallback rájuk, ha nincs oldal, nem      ──
+// ── jelenik meg a nav-linkjük (lásd templates/front-page.php) ─────────────────
+function tpk_rolunk_url() {
+    $slug = apply_filters( 'tpk_rolunk_oldal_slug', 'rolunk' );
+    $page = get_page_by_path( $slug );
+    return $page ? get_permalink( $page ) : '';
+}
+
+function tpk_kapcsolat_url() {
+    $slug = apply_filters( 'tpk_kapcsolat_oldal_slug', 'kapcsolat' );
+    $page = get_page_by_path( $slug );
+    return $page ? get_permalink( $page ) : '';
+}
