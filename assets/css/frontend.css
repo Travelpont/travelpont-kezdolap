@@ -1,0 +1,705 @@
+/**
+ * Travelpont Kezdőoldal – Frontend CSS
+ *
+ * A jóváhagyott mockup (Travelpont - kezdőoldal mockup.html) 1:1 lefordítása
+ * osztályokra. Asztali nézetre optimalizálva (nincs media query, min-width
+ * a mockup mintájára) – a felhasználó kérésére reszponzivitás nélkül.
+ *
+ * BRANDING: a hivatalos színpaletta CSS-változókban.
+ */
+
+:root {
+    --tpk-dark:      #54595F; /* elsődleges sötétszürke */
+    --tpk-accent:    #F2CB4E; /* akcentus sárga */
+    --tpk-secondary: #A98F6B; /* másodlagos bézs */
+    --tpk-bg-blue:   #E6F1FB; /* világoskék háttér */
+    --tpk-text:      #3A3D42; /* szöveg */
+    --tpk-bg-blog:   #F7F5F1; /* világos szürke háttér a blog szekcióhoz */
+}
+
+body.tpk-kezdolap {
+    margin: 0;
+    background: #FFFFFF;
+}
+
+.tpk-page,
+.tpk-page * {
+    box-sizing: border-box;
+}
+
+.tpk-page {
+    font-family: 'Inter', sans-serif;
+    color: var(--tpk-text);
+    background: #FFFFFF;
+    width: 100%;
+    min-width: 1280px;
+}
+
+.tpk-page a {
+    color: var(--tpk-dark);
+    text-decoration: none;
+}
+
+.tpk-page a:hover {
+    color: var(--tpk-accent);
+}
+
+/* ── Navigáció ──────────────────────────────────────────────────────────── */
+.tpk-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 64px;
+    background: #FFFFFF;
+}
+
+.tpk-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tpk-logo-badge {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    background: var(--tpk-dark);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tpk-logo-badge::before,
+.tpk-logo-badge::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    background: #FFFFFF;
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+
+.tpk-logo-badge::before { left: -4px; }
+.tpk-logo-badge::after  { right: -4px; }
+
+.tpk-logo-plane {
+    clip-path: polygon(0% 100%, 60% 0%, 100% 40%, 60% 40%, 45% 100%, 30% 60%);
+    width: 24px;
+    height: 24px;
+    background: var(--tpk-accent);
+    display: block;
+}
+
+.tpk-logo-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--tpk-dark);
+    letter-spacing: -0.02em;
+}
+
+.tpk-nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.tpk-nav-link {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.tpk-nav-cta {
+    background: var(--tpk-accent);
+    color: var(--tpk-dark) !important;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 999px;
+}
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.tpk-hero {
+    background: var(--tpk-bg-blue);
+    padding: 72px 64px 96px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+}
+
+.tpk-hero-copy {
+    max-width: 620px;
+}
+
+.tpk-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFFFFF;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--tpk-secondary);
+    margin-bottom: 24px;
+}
+
+.tpk-hero-badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--tpk-accent);
+}
+
+.tpk-hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--tpk-text);
+    margin: 0 0 24px;
+}
+
+.tpk-hero-title .tpk-accent-word {
+    color: var(--tpk-secondary);
+}
+
+.tpk-hero-subtitle {
+    font-size: 19px;
+    line-height: 1.6;
+    color: #5B6069;
+    margin: 0 0 36px;
+}
+
+.tpk-hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.tpk-btn-dark {
+    background: var(--tpk-dark);
+    color: #FFFFFF !important;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 16px 32px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.tpk-hero-note {
+    font-size: 14px;
+    color: #7A7F87;
+    font-weight: 500;
+}
+
+.tpk-hero-visual {
+    flex-shrink: 0;
+    width: 440px;
+    height: 400px;
+    border-radius: 24px;
+    background: repeating-linear-gradient(135deg, #DCE9F7, #DCE9F7 14px, #D1E2F4 14px, #D1E2F4 28px);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #CFE0F2;
+}
+
+.tpk-placeholder-label {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 13px;
+    color: #7A93AC;
+    background: #FFFFFF;
+    padding: 10px 18px;
+    border-radius: 8px;
+    letter-spacing: 0.02em;
+}
+
+/* ── Szekció-vázak (Ajánlatok / Miért mi / Blog) ───────────────────────────── */
+.tpk-section {
+    padding: 96px 64px;
+    background: #FFFFFF;
+}
+
+.tpk-section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+}
+
+.tpk-section-head-centered {
+    text-align: center;
+    margin-bottom: 52px;
+}
+
+.tpk-eyebrow {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--tpk-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 12px;
+}
+
+.tpk-eyebrow--onDark {
+    color: var(--tpk-accent);
+}
+
+.tpk-section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    color: var(--tpk-text);
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.tpk-section-title--onDark {
+    color: #FFFFFF;
+}
+
+.tpk-section-link {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--tpk-dark);
+    border-bottom: 2px solid var(--tpk-accent);
+    padding-bottom: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.tpk-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+
+.tpk-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+}
+
+.tpk-empty {
+    text-align: center;
+    color: #7A7F87;
+    padding: 2rem 1rem;
+}
+
+.tpk-empty--onDark {
+    color: #C7CBD1;
+}
+
+/* ── Ajánlat-kártya ─────────────────────────────────────────────────────── */
+.tpk-offer-card {
+    background: #FFFFFF;
+    border: 1px solid #EDEEF0;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(58, 61, 66, .04);
+    display: flex;
+    flex-direction: column;
+}
+
+.tpk-offer-media {
+    height: 170px;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 16px;
+    background-size: cover;
+    background-position: center;
+}
+
+.tpk-offer-media--placeholder {
+    background: repeating-linear-gradient(135deg, #E6F1FB, #E6F1FB 14px, #D8E9F8 14px, #D8E9F8 28px);
+}
+
+.tpk-offer-tag {
+    background: #FFFFFF;
+    color: var(--tpk-dark);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 999px;
+}
+
+.tpk-photo-note {
+    background: rgba(255, 255, 255, .9);
+    color: #7A7F87;
+    font-family: monospace;
+    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+.tpk-offer-body {
+    padding: 22px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.tpk-offer-dest {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 21px;
+    color: var(--tpk-text);
+    margin: 0 0 4px;
+}
+
+.tpk-offer-dates {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--tpk-secondary);
+    margin: 0 0 18px;
+}
+
+.tpk-offer-prices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+    background: #FAFAFA;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.tpk-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.tpk-price-row span:first-child {
+    color: #7A7F87;
+    font-weight: 500;
+}
+
+.tpk-price-row span:last-child {
+    font-weight: 700;
+    color: var(--tpk-text);
+}
+
+.tpk-price-divider {
+    height: 1px;
+    background: #ECECEC;
+    margin: 2px 0;
+}
+
+.tpk-price-total {
+    font-size: 15px;
+}
+
+.tpk-price-total span:first-child {
+    color: var(--tpk-text);
+    font-weight: 700;
+}
+
+.tpk-price-total span:last-child {
+    font-weight: 700;
+    color: var(--tpk-dark);
+    font-size: 17px;
+}
+
+.tpk-btn-accent {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--tpk-accent);
+    color: var(--tpk-dark) !important;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 13px;
+    border-radius: 10px;
+}
+
+.tpk-btn-accent--cta {
+    display: inline-flex;
+    padding: 16px 32px;
+}
+
+/* ── Úticélok ───────────────────────────────────────────────────────────── */
+.tpk-destinations {
+    padding: 96px 64px;
+    background: var(--tpk-dark);
+}
+
+.tpk-dest-card {
+    height: 340px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px;
+    border: 1px solid rgba(255, 255, 255, .08);
+    background-size: cover;
+    background-position: center;
+}
+
+.tpk-dest-card--placeholder {
+    background: repeating-linear-gradient(135deg, #6B7078, #6B7078 14px, #63676F 14px, #63676F 28px);
+}
+
+.tpk-dest-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(30, 32, 35, .75), rgba(30, 32, 35, 0) 60%);
+}
+
+.tpk-dest-content {
+    position: relative;
+    display: block;
+}
+
+.tpk-dest-name {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: #FFFFFF !important;
+    margin: 0 0 6px;
+}
+
+.tpk-dest-blurb {
+    display: block;
+    font-size: 14px;
+    color: #EDEDED;
+    font-weight: 500;
+}
+
+/* ── Miért mi? ──────────────────────────────────────────────────────────── */
+.tpk-why-head {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 56px;
+}
+
+.tpk-reason {
+    padding: 8px;
+}
+
+.tpk-reason-icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--tpk-bg-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tpk-reason-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--tpk-text);
+    margin: 0 0 10px;
+}
+
+.tpk-reason-text {
+    font-size: 15px;
+    line-height: 1.55;
+    color: #7A7F87;
+    margin: 0;
+}
+
+.tpk-icon-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 3px solid var(--tpk-dark);
+    display: block;
+}
+
+.tpk-icon-square {
+    width: 22px;
+    height: 22px;
+    border: 3px solid var(--tpk-dark);
+    border-radius: 4px;
+    display: block;
+}
+
+.tpk-icon-loader {
+    width: 22px;
+    height: 22px;
+    border: 3px solid var(--tpk-dark);
+    border-radius: 50%;
+    border-top-color: transparent;
+    transform: rotate(45deg);
+    display: block;
+}
+
+.tpk-icon-bag {
+    width: 20px;
+    height: 24px;
+    border: 3px solid var(--tpk-dark);
+    border-radius: 4px 4px 0 0;
+    display: block;
+}
+
+/* ── Blog / Útikalauz ───────────────────────────────────────────────────── */
+.tpk-blog {
+    padding: 96px 64px;
+    background: var(--tpk-bg-blog);
+}
+
+.tpk-article-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #EDEAE3;
+}
+
+.tpk-article-media {
+    height: 180px;
+    display: flex;
+    align-items: flex-start;
+    padding: 16px;
+    background-size: cover;
+    background-position: center;
+}
+
+.tpk-article-media--placeholder {
+    background: repeating-linear-gradient(135deg, #F0EBE3, #F0EBE3 14px, #E6DECF 14px, #E6DECF 28px);
+}
+
+.tpk-article-body {
+    padding: 24px;
+}
+
+.tpk-article-category {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--tpk-secondary);
+    margin: 0 0 10px;
+}
+
+.tpk-article-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--tpk-text);
+    line-height: 1.3;
+    margin: 0 0 10px;
+}
+
+.tpk-article-title a {
+    color: inherit !important;
+}
+
+.tpk-article-excerpt {
+    font-size: 14px;
+    color: #7A7F87;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ── Záró CTA ───────────────────────────────────────────────────────────── */
+.tpk-cta {
+    padding: 72px 64px;
+    background: var(--tpk-dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tpk-cta-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    color: #FFFFFF;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+}
+
+.tpk-cta-subtitle {
+    font-size: 15px;
+    color: #C7CBD1;
+    margin: 0;
+}
+
+.tpk-cta-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.tpk-social {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tpk-social-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tpk-social-icon-instagram {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #FFFFFF;
+    border-radius: 6px;
+    position: relative;
+    display: block;
+}
+
+.tpk-social-icon-instagram::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+}
+
+.tpk-social-icon-facebook {
+    width: 14px;
+    height: 18px;
+    border-left: 3px solid #FFFFFF;
+    border-bottom: 3px solid #FFFFFF;
+    border-radius: 0 0 0 8px;
+    display: block;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+.tpk-footer {
+    padding: 28px 64px;
+    background: #3A3D42;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tpk-footer-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #FFFFFF;
+}
+
+.tpk-footer-copy {
+    font-size: 13px;
+    color: #9A9DA3;
+}

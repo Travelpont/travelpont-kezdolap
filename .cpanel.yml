@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    - /bin/cp -R /home/travel24/travelpont-kezdolap-deploy/assets /home/travel24/public_html/wp-content/plugins/travelpont-kezdolap/
+    - /bin/cp -R /home/travel24/travelpont-kezdolap-deploy/includes /home/travel24/public_html/wp-content/plugins/travelpont-kezdolap/
+    - /bin/cp -R /home/travel24/travelpont-kezdolap-deploy/templates /home/travel24/public_html/wp-content/plugins/travelpont-kezdolap/
+    - /bin/cp /home/travel24/travelpont-kezdolap-deploy/travelpont-kezdolap.php /home/travel24/public_html/wp-content/plugins/travelpont-kezdolap/
+    - find /home/travel24/public_html/wp-content/plugins/travelpont-kezdolap -type d -exec chmod 755 {} \;
+    - find /home/travel24/public_html/wp-content/plugins/travelpont-kezdolap -type f -exec chmod 644 {} \;
