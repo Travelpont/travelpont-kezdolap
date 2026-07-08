@@ -2,8 +2,10 @@
  * Travelpont Kezdőoldal – Frontend CSS
  *
  * A jóváhagyott mockup (Travelpont - kezdőoldal mockup.html) 1:1 lefordítása
- * osztályokra. Asztali nézetre optimalizálva (nincs media query, min-width
- * a mockup mintájára) – a felhasználó kérésére reszponzivitás nélkül.
+ * osztályokra, deszkTOP-alapból, két töréspont (1024px, 768px) alatt
+ * reszponzív módosításokkal a fájl végén. Ugyanez a CSS adja a sablont a
+ * kezdőlapon KÍVÜLI oldalaknak is (`templates/page-wrapper.php`) – lásd a
+ * "Általános oldal-tartalom" és "Reszponzivitás" szakaszokat lent.
  *
  * BRANDING: a hivatalos színpaletta CSS-változókban.
  */
@@ -17,7 +19,7 @@
     --tpk-bg-blog:   #F7F5F1; /* világos szürke háttér a blog szekcióhoz */
 }
 
-body.tpk-kezdolap {
+body.tpk-managed-page {
     margin: 0;
     background: #FFFFFF;
 }
@@ -32,7 +34,7 @@ body.tpk-kezdolap {
     color: var(--tpk-text);
     background: #FFFFFF;
     width: 100%;
-    min-width: 1280px;
+    overflow-x: hidden;
 }
 
 .tpk-page a {
@@ -53,10 +55,14 @@ body.tpk-kezdolap {
     background: #FFFFFF;
 }
 
-.tpk-nav-brand {
+.tpk-nav-brand-link {
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+.tpk-nav-brand-link:hover .tpk-logo-text {
+    color: var(--tpk-dark) !important;
 }
 
 .tpk-logo-badge {
@@ -119,6 +125,42 @@ body.tpk-kezdolap {
     font-size: 14px;
     padding: 11px 22px;
     border-radius: 999px;
+}
+
+.tpk-nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: none;
+    border: 1px solid #E4E5E8;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.tpk-nav-toggle-bar {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--tpk-dark);
+    border-radius: 2px;
+    transition: transform .2s ease, opacity .2s ease;
+}
+
+.tpk-nav-toggle[aria-expanded="true"] .tpk-nav-toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.tpk-nav-toggle[aria-expanded="true"] .tpk-nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.tpk-nav-toggle[aria-expanded="true"] .tpk-nav-toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
 }
 
 /* ── Hero ───────────────────────────────────────────────────────────────── */
@@ -702,4 +744,217 @@ body.tpk-kezdolap {
 .tpk-footer-copy {
     font-size: 13px;
     color: #9A9DA3;
+}
+
+/* ── Általános oldal-tartalom (templates/page-wrapper.php) ─────────────────
+   Minden nem-főoldal URL (Rólunk, Kapcsolat, Ajánlatok/Úticélok lista-oldal,
+   egyedi Ajánlat/Úticél, Útikalauz index+cikk) ezt a keretet kapja. ────────── */
+.tpk-content-wrap {
+    background: #FFFFFF;
+    padding: 64px;
+}
+
+.tpk-content-inner {
+    margin: 0 auto;
+}
+
+.tpk-content-inner--narrow {
+    max-width: 760px;
+}
+
+.tpk-content-inner--wide {
+    max-width: 1280px;
+}
+
+.tpk-page-head {
+    margin-bottom: 32px;
+}
+
+.tpk-page-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    color: var(--tpk-text);
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+/* Szabad szöveges tartalom (Rólunk/Kapcsolat/blogcikk/ajánlat-leírás) olvasható
+   tipográfiája – CSAK a keskeny (--narrow) elrendezésen, hogy a széles
+   (--wide) lista-oldalak shortcode-kártyáinak saját designját ne írja felül */
+.tpk-content-inner--narrow .tpk-page-content {
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.tpk-content-inner--narrow .tpk-page-content p { margin: 0 0 20px; }
+.tpk-content-inner--narrow .tpk-page-content h2,
+.tpk-content-inner--narrow .tpk-page-content h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    color: var(--tpk-text);
+    margin: 36px 0 14px;
+}
+.tpk-content-inner--narrow .tpk-page-content img { max-width: 100%; height: auto; border-radius: 14px; }
+.tpk-content-inner--narrow .tpk-page-content a { color: var(--tpk-secondary); text-decoration: underline; }
+.tpk-content-inner--narrow .tpk-page-content ul,
+.tpk-content-inner--narrow .tpk-page-content ol { padding-left: 22px; }
+
+.tpk-page-content img { max-width: 100%; height: auto; }
+
+.tpk-pagination {
+    margin-top: 56px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.tpk-pagination .page-numbers {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 10px;
+    background: #FAFAFA;
+    color: var(--tpk-text) !important;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.tpk-pagination .page-numbers.current {
+    background: var(--tpk-accent);
+    color: var(--tpk-dark) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Reszponzivitás – deszktop az alap, lejjebb szűkül két töréspontnál
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤1024px) ───────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .tpk-nav { padding: 18px 32px; }
+
+    .tpk-hero { padding: 56px 32px 72px; gap: 32px; }
+    .tpk-hero-title { font-size: 42px; }
+    .tpk-hero-visual { width: 320px; height: 320px; }
+
+    .tpk-section,
+    .tpk-destinations,
+    .tpk-blog { padding: 64px 32px; }
+
+    .tpk-cta { padding: 56px 32px; }
+    .tpk-footer { padding: 24px 32px; }
+    .tpk-content-wrap { padding: 48px 32px; }
+
+    .tpk-grid-3,
+    .tpk-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Mobil (≤768px) ─────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    /* Nav – hamburger menü */
+    .tpk-nav {
+        position: relative;
+        padding: 14px 20px;
+        flex-wrap: wrap;
+    }
+
+    .tpk-nav-toggle { display: flex; }
+
+    .tpk-nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        background: #FFFFFF;
+        padding: 12px 20px 20px;
+        border-top: 1px solid #EDEEF0;
+        box-shadow: 0 16px 28px rgba(30, 32, 35, .08);
+        z-index: 40;
+    }
+
+    .tpk-nav-menu.tpk-nav-menu--open { display: flex; }
+
+    .tpk-nav-link {
+        padding: 13px 4px;
+        border-bottom: 1px solid #F2F2F2;
+    }
+
+    .tpk-nav-cta {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    /* Hero – egymás alá */
+    .tpk-hero {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 40px 20px 56px;
+        gap: 32px;
+    }
+
+    .tpk-hero-copy { max-width: none; }
+    .tpk-hero-title { font-size: 32px; }
+    .tpk-hero-subtitle { font-size: 16px; }
+    .tpk-hero-actions { flex-direction: column; align-items: stretch; gap: 14px; }
+    .tpk-hero-note { text-align: center; }
+    .tpk-hero-visual { width: 100%; height: 220px; }
+
+    /* Szekció-vázak */
+    .tpk-section,
+    .tpk-destinations,
+    .tpk-blog { padding: 48px 20px; }
+
+    .tpk-section-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 32px;
+    }
+
+    .tpk-section-title { font-size: 26px; }
+
+    .tpk-grid-3,
+    .tpk-grid-4 { grid-template-columns: 1fr; gap: 20px; }
+
+    .tpk-why-head { margin-bottom: 36px; }
+
+    /* Záró CTA */
+    .tpk-cta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 28px;
+        padding: 48px 20px;
+    }
+
+    .tpk-cta-title { font-size: 24px; }
+    .tpk-cta-actions { flex-direction: column; align-items: stretch; width: 100%; gap: 16px; }
+    .tpk-btn-accent--cta { justify-content: center; }
+
+    /* Footer */
+    .tpk-footer {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+        padding: 24px 20px;
+    }
+
+    /* Általános oldal-tartalom */
+    .tpk-content-wrap { padding: 40px 20px; }
+    .tpk-page-title { font-size: 28px; }
+    .tpk-page-content { font-size: 16px; }
+}
+
+/* ── Kis mobil (≤400px) ─────────────────────────────────────────────────── */
+@media (max-width: 400px) {
+    .tpk-logo-text { font-size: 18px; }
+    .tpk-hero-title { font-size: 27px; }
+    .tpk-offer-body,
+    .tpk-article-body { padding: 18px; }
 }

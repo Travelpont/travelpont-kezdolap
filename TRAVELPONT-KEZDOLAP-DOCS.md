@@ -1,6 +1,6 @@
 # Travelpont Kezdőoldal plugin – dokumentáció
 
-> Verzió: 1.2.0 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
+> Verzió: 1.3.0 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
 > követi (`D:\travelpont.hu\_Saját_pluginek\`)
 > SZABÁLY: minden módosításkor verziót emelünk a fő fájl fejlécében
 > (cache-buster + követhetőség).
@@ -28,7 +28,7 @@ pixelpontos megvalósítása, valós adatokkal feltöltve:
 Minden kártyánál, ahol nincs feltöltött kiemelt kép, egy csíkos
 placeholder-minta jelenik meg (a design nem törik el kép hiányában).
 
-## Miért nem `front-page.php` a témában?
+## Miért nem a téma adja az oldalakat? (site-wide oldal-keret, v1.3.0-tól)
 
 A projekt korábbi konvenciója (lásd a Travelpont Ajánlatok/Úticélok
 pluginek `single-display.php`-ja), hogy a megoldásoknak témafüggetlennek
@@ -39,12 +39,30 @@ mockup SAJÁT navigációt és footert is hoz, amit nem lehet egy téma nav/
 footer köré illeszteni duplikáció nélkül.
 
 Ezért ez a plugin a `template_include` WordPress-szűrővel adja a TELJES
-HTML dokumentumot (`includes/template-loader.php` → `templates/front-page.php`),
-a téma header.php/footer.php-ját megkerülve – de a `wp_head()`/`wp_footer()`
-hívásokkal így is minden más plugin (SEO, statisztika stb.) rendben
-belekerül az oldalba. Ez ugyanúgy túléli a témaváltást, mint egy szokásos
-`front-page.php`, csak nem kell a téma mappájához nyúlni (ami frissítéskor
-elveszne, ha nem gyerektéma).
+HTML dokumentumot, a téma header.php/footer.php-ját megkerülve – de a
+`wp_head()`/`wp_footer()` hívásokkal így is minden más plugin (SEO,
+statisztika stb.) rendben belekerül az oldalba. Ez ugyanúgy túléli a
+témaváltást, mint egy szokásos `front-page.php`, csak nem kell a téma
+mappájához nyúlni (ami frissítéskor elveszne, ha nem gyerektéma).
+
+**v1.3.0-tól ez NEM csak a főoldalra igaz.** A felhasználónak nem volt
+Elementor Pro előfizetése a Theme Builderhez, és a téma alap
+fejléce/lábléce nem illett a Kezdőlap saját brandingjéhez – ezért a
+`template_include` trükk minden, a plugin által "kezelt" kérésre kiterjed
+(`includes/template-loader.php` → `tpk_is_managed_request()`: `is_front_page()`
+VAGY `is_page()` VAGY `is_home()` VAGY `is_singular( array( 'post', 'ajanlat', 'uticel' ) )`).
+Két sablon van:
+- `templates/front-page.php` – csak a főoldalra, változatlan.
+- `templates/page-wrapper.php` – MINDEN MÁS kezelt oldalra (Rólunk,
+  Kapcsolat, Ajánlatok/Úticélok lista-Oldal, egyedi Ajánlat/Úticél/
+  bejegyzés, az Útikalauz bejegyzés-index). `is_home()`-nál a standard WP
+  Loopot kártyás rácsban írja ki (a főoldali Blog-szekció márkázásával),
+  egyébként `the_title()` + `the_content()` – az Ajánlatok/Úticélok
+  pluginek `the_content` szűrője ITT IS lefut, tehát az egyedi Ajánlat/
+  Úticél doboz automatikusan megjelenik, kód nélkül.
+
+A közös nav/footer HTML-t az `includes/chrome.php` `tpk_render_nav()` /
+`tpk_render_footer()` függvényei adják, mindkét sablon ezeket hívja (DRY).
 
 **Ha ezt a plugint aktiválod, a WordPress "Beállítások → Olvasás" alatti
 kezdőlap-beállítástól FÜGGETLENÜL ez a sablon jelenik meg a főoldalon**
@@ -55,16 +73,36 @@ oldal" módban is).
 
 ```
 travelpont-kezdolap/
-├── travelpont-kezdolap.php     ← fő fájl: konstansok, betűtípus + CSS enqueue
+├── travelpont-kezdolap.php     ← fő fájl: konstansok, betűtípus + CSS/JS enqueue
 ├── includes/
-│   ├── template-loader.php     ← template_include szűrő
-│   ├── content-helpers.php     ← ⭐ adatlekérés (Ajánlatok/Úticélok/Blog) + "Miért mi?" szöveg
+│   ├── template-loader.php     ← template_include szűrő + tpk_is_managed_request()
+│   ├── chrome.php              ← közös nav/footer (tpk_render_nav / tpk_render_footer)
+│   ├── content-helpers.php     ← ⭐ adatlekérés (Ajánlatok/Úticélok/Blog) + "Miért mi?" szöveg + al-oldal URL-ek
 │   └── settings.php            ← admin "Kezdőlap" menüpont – szövegek kódmentes szerkesztése
 ├── templates/
-│   └── front-page.php          ← a teljes HTML dokumentum (nav-tól footerig)
-└── assets/css/
-    └── frontend.css            ← a mockup 1:1 lefordítása, branding CSS-változókban
+│   ├── front-page.php          ← a teljes HTML dokumentum a főoldalhoz (nav-tól footerig)
+│   └── page-wrapper.php        ← ua. minden MÁS kezelt oldalhoz (lásd fent)
+└── assets/
+    ├── css/frontend.css        ← a mockup 1:1 lefordítása + reszponzív töréspontok, branding CSS-változókban
+    └── js/frontend.js          ← mobil hamburger-menü nyit/zár
 ```
+
+## Reszponzivitás (v1.3.0-tól)
+
+A v1.0.0 CSS szándékosan reszponzivitás nélkül készült (a felhasználó akkori
+kérésére). v1.3.0-tól a `frontend.css` deszktop-alapú, két töréspont
+szűkíti lejjebb (a fájl végén, "Reszponzivitás" szakaszban):
+- **≤1024px** (tablet) – 3-4 oszlopos rácsok 2 oszlopra, kisebb paddingek,
+  kisebb hero-cím.
+- **≤768px** (mobil) – a nav a `.tpk-nav-toggle` hamburger-gombbal
+  lenyíló menüvé alakul (`assets/js/frontend.js` kapcsolja a
+  `.tpk-nav-menu--open` osztályt), a hero egymás alá rendeződik, minden
+  rács 1 oszloposra vált, a záró CTA és a footer is oszloposan rendeződik.
+- **≤400px** – apró finomhangolás (logó-szöveg, kártya-paddingek).
+
+Ha módosítod a mockupot vagy új szekciót adsz hozzá, MINDIG ellenőrizd a
+töréspontokat is – ez könnyen kimarad, mert a fájl teteje (deszktop
+stílusok) és a reszponzív blokk (fájl vége) fizikailag távol van egymástól.
 
 ## Kapcsolódó változás a Travelpont Ajánlatok pluginban (v1.2.0)
 

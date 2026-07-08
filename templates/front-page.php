@@ -14,10 +14,7 @@ $tpk_cikkek    = tpk_get_cikkek( 3 );
 $tpk_pontok    = tpk_miert_mi_pontok();
 
 $tpk_url_ajanlatok = tpk_ajanlatok_url();
-$tpk_url_uticelok  = tpk_uticelok_url();
 $tpk_url_utikalauz = tpk_utikalauz_url();
-$tpk_url_rolunk    = tpk_rolunk_url();
-$tpk_url_kapcsolat = tpk_kapcsolat_url();
 
 $tpk_tagline = get_bloginfo( 'description' );
 $tpk_title   = $tpk_tagline ? get_bloginfo( 'name' ) . ' – ' . $tpk_tagline : get_bloginfo( 'name' );
@@ -29,26 +26,12 @@ $tpk_title   = $tpk_tagline ? get_bloginfo( 'name' ) . ' – ' . $tpk_tagline : 
 <title><?php echo esc_html( $tpk_title ); ?></title>
 <?php wp_head(); ?>
 </head>
-<body <?php body_class( 'tpk-kezdolap' ); ?>>
+<body <?php body_class( 'tpk-managed-page tpk-kezdolap' ); ?>>
 <?php wp_body_open(); ?>
 
 <div class="tpk-page">
 
-    <!-- NAVIGÁCIÓ -->
-    <nav class="tpk-nav">
-        <div class="tpk-nav-brand">
-            <span class="tpk-logo-badge"><span class="tpk-logo-plane"></span></span>
-            <span class="tpk-logo-text"><?php bloginfo( 'name' ); ?></span>
-        </div>
-        <div class="tpk-nav-menu">
-            <a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_ajanlatok ); ?>">Ajánlatok</a>
-            <a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_uticelok ); ?>">Úticélok</a>
-            <a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_utikalauz ); ?>">Útikalauz</a>
-            <?php if ( $tpk_url_rolunk ) : ?><a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_rolunk ); ?>">Rólunk</a><?php endif; ?>
-            <?php if ( $tpk_url_kapcsolat ) : ?><a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_kapcsolat ); ?>">Kapcsolat</a><?php endif; ?>
-            <a class="tpk-nav-cta" href="<?php echo esc_url( $tpk_url_ajanlatok ); ?>"><?php echo esc_html( apply_filters( 'tpk_nav_cta_szoveg', 'Ajánlatok böngészése' ) ); ?></a>
-        </div>
-    </nav>
+    <?php tpk_render_nav(); ?>
 
     <!-- HERO -->
     <section class="tpk-hero">
@@ -244,11 +227,7 @@ $tpk_title   = $tpk_tagline ? get_bloginfo( 'name' ) . ' – ' . $tpk_tagline : 
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="tpk-footer">
-        <span class="tpk-footer-brand"><?php bloginfo( 'name' ); ?></span>
-        <span class="tpk-footer-copy">© <?php echo esc_html( date_i18n( 'Y' ) ); ?> Travelpont.hu — Affiliate partnerlinkeken keresztül</span>
-    </footer>
+    <?php tpk_render_footer(); ?>
 
 </div>
 
