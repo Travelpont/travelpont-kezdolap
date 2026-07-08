@@ -1,6 +1,6 @@
 # Travelpont Kezdőoldal plugin – dokumentáció
 
-> Verzió: 1.0.0 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
+> Verzió: 1.1.0 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
 > követi (`D:\travelpont.hu\_Saját_pluginek\`)
 > SZABÁLY: minden módosításkor verziót emelünk a fő fájl fejlécében
 > (cache-buster + követhetőség).
@@ -57,7 +57,8 @@ travelpont-kezdolap/
 ├── travelpont-kezdolap.php     ← fő fájl: konstansok, betűtípus + CSS enqueue
 ├── includes/
 │   ├── template-loader.php     ← template_include szűrő
-│   └── content-helpers.php     ← ⭐ adatlekérés (Ajánlatok/Úticélok/Blog) + "Miért mi?" szöveg
+│   ├── content-helpers.php     ← ⭐ adatlekérés (Ajánlatok/Úticélok/Blog) + "Miért mi?" szöveg
+│   └── settings.php            ← admin "Kezdőlap" menüpont – szövegek kódmentes szerkesztése
 ├── templates/
 │   └── front-page.php          ← a teljes HTML dokumentum (nav-tól footerig)
 └── assets/css/
@@ -73,12 +74,28 @@ Travelpont Ajánlatok plugin `fields.php`-ja két új mezőt kapott:
 repjegy+szállás összegét adja vissza helyette. Részletek:
 `travelpont-ajanlatok/TRAVELPONT-AJANLATOK-DOCS.md`.
 
-## Hogyan bővítsd?
+## Admin szerkesztés (kód nélkül)
+
+A WP Admin bal menüjében megjelenő **"Kezdőlap"** menüpont alatt (capability:
+`manage_options`) az `includes/settings.php` egy beállítási oldalt ad, ahol a
+hero cím/alcím, a jelvény- és gombszövegek, a "Miért mi?" 4 pontja, az üres
+állapot szövegei, a záró CTA és a közösségi linkek (Instagram/Facebook)
+kódírás nélkül szerkeszthetők. Ez egyetlen `tpk_settings` opciót ír a
+`wp_options` táblába, és ugyanazokra a `tpk_*` filterekre iratkozik fel,
+amiket korábban csak snippettel lehetett felülírni – tehát az alábbi
+kódszintű megoldás is működik továbbra is, csak most már nem kötelező.
+
+**Amit az admin felület NEM tud:** elrendezés, design, CSS, szekciók
+sorrendje, a lekérdezések (`tpk_*_query_args`) módosítása – ezekhez továbbra
+is a plugin kódjához kell nyúlni.
+
+## Hogyan bővítsd kódból?
 
 A statikus szövegek (hero cím/alcím, gombfeliratok, "Miért mi?" 4 pontja,
 záró CTA szövege, közösségi média linkek) mind `apply_filters()`-en keresztül
 íródnak ki, tehát kódmódosítás nélkül, egy kis `functions.php`-szerű
-snippetből felülírhatók:
+snippetből is felülírhatók (ha az admin felületnél finomabb, feltételes
+logika kell):
 
 ```php
 add_filter( 'tpk_hero_cim', function() {

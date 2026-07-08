@@ -3,7 +3,7 @@
  * Plugin Name: Travelpont Kezdőoldal
  * Plugin URI:  https://travelpont.hu
  * Description: A Travelpont kezdőoldalának teljes, jóváhagyott mockup alapján épített sablonja – ACF-mentes, önálló plugin, a Travelpont Ajánlatok / Úticélok pluginek mintájára.
- * Version:     1.0.0
+ * Version:     1.1.0
  * Author:      travelpont.hu
  * Text Domain: travelpont-kezdolap
  */
@@ -18,6 +18,7 @@ define( 'TPK_URL',  plugin_dir_url( __FILE__ ) );
 // ── Modulok betöltése ─────────────────────────────────────────────────────────
 require_once TPK_PATH . 'includes/content-helpers.php';
 require_once TPK_PATH . 'includes/template-loader.php';
+require_once TPK_PATH . 'includes/settings.php';
 
 // ── Betűtípusok + stílus – csak a kezdőlapon ──────────────────────────────────
 add_action( 'wp_head', function() {
