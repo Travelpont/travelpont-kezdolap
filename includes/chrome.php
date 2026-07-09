@@ -21,11 +21,11 @@ function tpk_render_nav() {
     <nav class="tpk-nav">
         <a class="tpk-nav-brand-link" href="<?php echo esc_url( home_url( '/' ) ); ?>">
             <?php if ( $tpk_logo_url ) : ?>
-                <img class="tpk-logo-img" src="<?php echo esc_url( $tpk_logo_url ); ?>" alt="">
+                <img class="tpk-logo-img" src="<?php echo esc_url( $tpk_logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
             <?php else : ?>
                 <span class="tpk-logo-badge"><span class="tpk-logo-plane"></span></span>
+                <span class="tpk-logo-text"><?php bloginfo( 'name' ); ?></span>
             <?php endif; ?>
-            <span class="tpk-logo-text"><?php bloginfo( 'name' ); ?></span>
         </a>
         <button type="button" class="tpk-nav-toggle" aria-expanded="false" aria-controls="tpk-nav-menu" aria-label="Menü megnyitása">
             <span class="tpk-nav-toggle-bar"></span>

@@ -141,7 +141,7 @@ function tpk_render_settings_page() {
                     <th>Logó</th>
                     <td>
                         <?php tpk_media_mezo( 'logo_kep_id', $s['logo_kep_id'] ); ?>
-                        <p class="description">Négyzetes ikon/embléma (pl. 500×500px, átlátszó hátterű PNG) – ez a nav-ban egy kicsi, kompakt ikonként jelenik meg a "<?php bloginfo( 'name' ); ?>" felirat MELLETT, nem helyette. Ha üresen hagyod, a jelvényes/repülős CSS-ikon jelenik meg.</p>
+                        <p class="description">Teljes logó (ikon + "<?php bloginfo( 'name' ); ?>" felirat egy képben), átlátszó hátterű PNG. <strong>Fontos:</strong> a képet szorosan a látható rajzolatra vágva töltsd fel – ha a fájl vászna nagy üres/átlátszó margót tartalmaz a logó körül (pl. egy négyzetes exportnál gyakori), a nav-ban aránytalanul kicsinek/olvashatatlannak fog látszani, mert a böngésző a TELJES vásznat skálázza, az üres résszel együtt. Ha üresen hagyod, a jelvényes/repülős CSS-ikon jelenik meg.</p>
                     </td>
                 </tr>
                 <tr>

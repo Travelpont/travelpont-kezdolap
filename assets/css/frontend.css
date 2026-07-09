@@ -100,9 +100,8 @@ body.tpk-managed-page {
 }
 
 .tpk-logo-img {
-    width: 44px;
     height: 44px;
-    object-fit: contain;
+    width: auto;
     display: block;
 }
 

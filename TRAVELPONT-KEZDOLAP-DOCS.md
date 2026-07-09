@@ -1,6 +1,6 @@
 # Travelpont Kezdőoldal plugin – dokumentáció
 
-> Verzió: 1.4.2 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
+> Verzió: 1.4.3 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
 > követi (`D:\travelpont.hu\_Saját_pluginek\`)
 > SZABÁLY: minden módosításkor verziót emelünk a fő fájl fejlécében
 > (cache-buster + követhetőség).
@@ -174,13 +174,26 @@ attachment ID a `tpk_settings['logo_kep_id']` / `['hero_kep_id']` alatt
 tárolódik, a `content-helpers.php` `tpk_logo_url()` / `tpk_hero_kep_url()`
 függvényei olvassák ki (`wp_get_attachment_image_url()`).
 
-- **Logó** – ha be van állítva, egy kompakt, négyzetes `<img class="tpk-logo-img">`
-  (44×44px, `object-fit: contain`) váltja fel a CSS-ből rajzolt jelvényes/
-  repülős ikont a nav-ban – a "Travelpont" FELIRAT MELLETT, nem helyette
-  (`includes/chrome.php` → `tpk_render_nav()`). Ajánlott formátum: négyzetes,
-  átlátszó hátterű PNG (a feltöltött 500×500px is jó, a böngésző kicsire
-  skálázza) – ha a kép a teljes "ikon+felirat" lockupot tartalmazná egyetlen
-  fájlban, az a kis méretben olvashatatlanná zsugorodna, ezért NEM ajánlott.
+- **Logó** – ha be van állítva, egy `<img class="tpk-logo-img">` (magasság
+  44px, szélesség automatikus) váltja fel a CSS-ből rajzolt jelvényes/
+  repülős ikont ÉS a "Travelpont" feliratot is a nav-ban
+  (`includes/chrome.php` → `tpk_render_nav()`) – tehát a feltöltött kép egy
+  TELJES logó (ikon+felirat egyben), nem csak egy kis ikon.
+  **Kritikus**: a fájlt szorosan a látható rajzolatra vágva kell feltölteni.
+  Az első feltöltött verzió (`_Logó/TravelPont Logó v3.png`, 500×500px
+  négyzetes vászon) körül hatalmas átlátszó margó volt (a tényleges
+  rajzolat csak 386×138px volt a vászon közepén) – emiatt bármekkora
+  CSS-méretre állítottuk, a böngésző a TELJES (üres résszel együtt)
+  négyzetet skálázta, a látható logó pedig arányosan mindig ugyanolyan
+  kicsi/olvashatatlan maradt. A megoldás: a `Read` eszközzel megnéztük a
+  tényleges fájlt, PowerShell `System.Drawing.Bitmap`-pel (nincs
+  ImageMagick/Python telepítve ezen a gépen) pixelenként bejártuk az
+  átlátszó (`Alpha`) csatornát a tartalom befoglaló téglalapjának
+  megtalálásához, és `Bitmap.Clone()`-nal kivágtuk rá + 20px margóval
+  (`_Logó/TravelPont Logo v3 - korbevagva.png`, 426×178px, 2.39:1 arány).
+  **Tanulság**: ha legközelebb egy feltöltött kép "nem látszik" rendesen,
+  ELŐSZÖR a fájlt magát kell megnézni (`Read` tool képeknél is működik),
+  NEM találgatással CSS-méreteket próbálgatni.
 - **Hero fotó** – ha be van állítva, `background-image`-ként kerül a
   `.tpk-hero-visual`-ra a csíkos placeholder helyett
   (`templates/front-page.php`).
