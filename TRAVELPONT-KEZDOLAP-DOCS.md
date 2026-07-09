@@ -1,6 +1,6 @@
 # Travelpont Kezdőoldal plugin – dokumentáció
 
-> Verzió: 1.4.1 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
+> Verzió: 1.4.2 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
 > követi (`D:\travelpont.hu\_Saját_pluginek\`)
 > SZABÁLY: minden módosításkor verziót emelünk a fő fájl fejlécében
 > (cache-buster + követhetőség).
@@ -174,9 +174,13 @@ attachment ID a `tpk_settings['logo_kep_id']` / `['hero_kep_id']` alatt
 tárolódik, a `content-helpers.php` `tpk_logo_url()` / `tpk_hero_kep_url()`
 függvényei olvassák ki (`wp_get_attachment_image_url()`).
 
-- **Logó** – ha be van állítva, egy `<img class="tpk-logo-img">` váltja fel a
-  CSS-ből rajzolt jelvényes/repülős placeholdert a nav-ban
-  (`includes/chrome.php` → `tpk_render_nav()`).
+- **Logó** – ha be van állítva, egy kompakt, négyzetes `<img class="tpk-logo-img">`
+  (44×44px, `object-fit: contain`) váltja fel a CSS-ből rajzolt jelvényes/
+  repülős ikont a nav-ban – a "Travelpont" FELIRAT MELLETT, nem helyette
+  (`includes/chrome.php` → `tpk_render_nav()`). Ajánlott formátum: négyzetes,
+  átlátszó hátterű PNG (a feltöltött 500×500px is jó, a böngésző kicsire
+  skálázza) – ha a kép a teljes "ikon+felirat" lockupot tartalmazná egyetlen
+  fájlban, az a kis méretben olvashatatlanná zsugorodna, ezért NEM ajánlott.
 - **Hero fotó** – ha be van állítva, `background-image`-ként kerül a
   `.tpk-hero-visual`-ra a csíkos placeholder helyett
   (`templates/front-page.php`).

@@ -141,7 +141,7 @@ function tpk_render_settings_page() {
                     <th>Logó</th>
                     <td>
                         <?php tpk_media_mezo( 'logo_kep_id', $s['logo_kep_id'] ); ?>
-                        <p class="description">Ha üresen hagyod, a jelvényes/repülős CSS-logó jelenik meg (mint eddig).</p>
+                        <p class="description">Négyzetes ikon/embléma (pl. 500×500px, átlátszó hátterű PNG) – ez a nav-ban egy kicsi, kompakt ikonként jelenik meg a "<?php bloginfo( 'name' ); ?>" felirat MELLETT, nem helyette. Ha üresen hagyod, a jelvényes/repülős CSS-ikon jelenik meg.</p>
                     </td>
                 </tr>
                 <tr>
