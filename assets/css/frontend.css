@@ -100,8 +100,10 @@ body.tpk-managed-page {
 }
 
 .tpk-logo-img {
-    height: 40px;
+    height: 56px;
     width: auto;
+    max-width: 220px;
+    object-fit: contain;
     display: block;
 }
 
@@ -874,6 +876,7 @@ body.tpk-managed-page {
     }
 
     .tpk-nav-toggle { display: flex !important; }
+    .tpk-logo-img { height: 40px; }
 
     .tpk-nav-menu {
         display: none;

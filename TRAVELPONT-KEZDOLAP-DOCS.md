@@ -1,6 +1,6 @@
 # Travelpont Kezdőoldal plugin – dokumentáció
 
-> Verzió: 1.4.0 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
+> Verzió: 1.4.1 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
 > követi (`D:\travelpont.hu\_Saját_pluginek\`)
 > SZABÁLY: minden módosításkor verziót emelünk a fő fájl fejlécében
 > (cache-buster + követhetőség).
