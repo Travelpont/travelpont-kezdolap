@@ -45,24 +45,26 @@ statisztika stb.) rendben belekerül az oldalba. Ez ugyanúgy túléli a
 témaváltást, mint egy szokásos `front-page.php`, csak nem kell a téma
 mappájához nyúlni (ami frissítéskor elveszne, ha nem gyerektéma).
 
-**v1.3.0-tól ez NEM csak a főoldalra igaz.** A felhasználónak nem volt
-Elementor Pro előfizetése a Theme Builderhez, és a téma alap
-fejléce/lábléce nem illett a Kezdőlap saját brandingjéhez – ezért a
-`template_include` trükk minden, a plugin által "kezelt" kérésre kiterjed
-(`includes/template-loader.php` → `tpk_is_managed_request()`: `is_front_page()`
-VAGY `is_page()` VAGY `is_home()` VAGY `is_singular( array( 'post', 'ajanlat', 'uticel' ) )`).
-Két sablon van:
-- `templates/front-page.php` – csak a főoldalra, változatlan.
-- `templates/page-wrapper.php` – MINDEN MÁS kezelt oldalra (Rólunk,
-  Kapcsolat, Ajánlatok/Úticélok lista-Oldal, egyedi Ajánlat/Úticél/
-  bejegyzés, az Útikalauz bejegyzés-index). `is_home()`-nál a standard WP
-  Loopot kártyás rácsban írja ki (a főoldali Blog-szekció márkázásával),
-  egyébként `the_title()` + `the_content()` – az Ajánlatok/Úticélok
-  pluginek `the_content` szűrője ITT IS lefut, tehát az egyedi Ajánlat/
-  Úticél doboz automatikusan megjelenik, kód nélkül.
+**v1.3.0–1.4.x között ez NEM csak a főoldalra volt igaz** (a
+`template_include` minden "kezelt" kérésre – Oldalak, egyedi bejegyzések,
+bejegyzés-index – a `page-wrapper.php`-t adta). **v1.5.0-tól (2026-07-09)
+STRATÉGIAI FORDULAT: a plugin átvétele leszűkült KIZÁRÓLAG a főoldalra.**
+A felhasználónak nincs vizuális kontrollja, ha minden oldal kódban van;
+ezért áttértünk a natív WP Site Editor + Kadence (ingyenes) irányra, ahol a
+fejléc/lábléc/oldalak kód nélkül szerkeszthetők. A `tpk_is_managed_request()`
+immár `is_front_page()`-t ad vissza; a `template_include` csak a főoldalon a
+`templates/front-page.php`-t tölti be, minden más oldalt a TÉMA rendereli.
 
-A közös nav/footer HTML-t az `includes/chrome.php` `tpk_render_nav()` /
-`tpk_render_footer()` függvényei adják, mindkét sablon ezeket hívja (DRY).
+- `templates/front-page.php` – csak a főoldalra, változatlan.
+- `templates/page-wrapper.php` – **v1.5.0-tól már NEM hívódik meg** (a fájl
+  megmarad hivatkozásként, de nincs használatban). A Rólunk / Kapcsolat /
+  Ajánlatok–Úticélok lista / Útikalauz index / egyedi Ajánlat–Úticél
+  oldalakat a téma rendereli; az Ajánlatok/Úticélok pluginek `the_content`
+  szűrője a téma alatt is lefut (a doboz megjelenik), a lista-oldalak
+  shortcode-dal jönnek.
+
+A főoldal közös nav/footer HTML-jét az `includes/chrome.php` `tpk_render_nav()` /
+`tpk_render_footer()` függvényei adják (a `front-page.php` hívja).
 
 **Ha ezt a plugint aktiválod, a WordPress "Beállítások → Olvasás" alatti
 kezdőlap-beállítástól FÜGGETLENÜL ez a sablon jelenik meg a főoldalon**

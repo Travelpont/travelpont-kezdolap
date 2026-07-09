@@ -2,41 +2,36 @@
 /**
  * Travelpont Kezdőoldal – sablon-betöltés
  *
- * SZÁNDÉKOS ELTÉRÉS a Travelpont Ajánlatok/Úticélok mintától: azok a
- * the_content szűrővel fűznek dobozt a MEGLÉVŐ téma-elrendezés köré (ez
- * teszi őket téma-függetlenné). A kezdőlap mockupja viszont saját navigációt
- * és footert is hoz – ezt nem lehet egy téma nav/footer köré illeszteni
- * anélkül, hogy duplikálódna. Ezért itt a `template_include` szűrővel a
- * plugin adja a TELJES HTML dokumentumot, a téma header.php/footer.php-ját
- * megkerülve – a főoldalon a `templates/front-page.php`-t, MINDEN MÁS
- * kezelt oldalon (Oldalak, egyedi Ajánlat/Úticél/bejegyzés, a bejegyzés-
- * index) a `templates/page-wrapper.php`-t, hogy a teljes site egységes,
- * brandelt fejlécet/láblécet kapjon, ne csak a főoldal.
+ * A plugin a `template_include` szűrővel a FŐOLDALON a téma sablonjait
+ * megkerülve adja a TELJES HTML dokumentumot (`templates/front-page.php`),
+ * a `wp_head()`/`wp_footer()` hívásokkal együtt – így témaváltás esetén is
+ * működik (Twenty Twenty-Five / Hello Elementor / Kadence alatt is), és más
+ * pluginek (SEO stb.) is rendben belekerülnek az oldalba.
  *
- * Ez attól még ugyanúgy téma-független marad: nem nyúl a téma fájljaihoz,
- * témaváltás esetén is működik (Twenty Twenty-Five vagy Hello Elementor
- * alatt is), és a wp_head()/wp_footer() hívásokkal minden más plugin
- * (SEO, statisztika stb.) továbbra is rendben belekerül az oldalba.
+ * 2026-07-09 STRATÉGIAI FORDULAT: a plugin átvétele leszűkült KIZÁRÓLAG a
+ * főoldalra. A többi oldalt (Rólunk / Kapcsolat / Ajánlatok–Úticélok lista,
+ * Útikalauz index, egyedi Ajánlat / Úticél / bejegyzés) mostantól a TÉMA
+ * (Kadence) rendereli, hogy a felhasználó vizuálisan, kód nélkül
+ * szerkeszthesse a fejlécet / láblécet / oldalakat. Ez biztonságos: az
+ * Ajánlatok/Úticélok pluginek a `the_content` szűrővel fűzik be a saját
+ * dobozukat (téma-független), a lista-oldalak pedig shortcode-dal jelennek
+ * meg. A korábbi `templates/page-wrapper.php` (nem-főoldali keret) ezzel
+ * kikerült a használatból – a fájl megmarad, de már nem hívódik meg.
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// ── Melyik kéréseket adja a plugin a téma helyett? ────────────────────────
+// ── Melyik kéréseket kezeli (veszi át) a plugin a téma helyett? ───────────
+// Immár KIZÁRÓLAG a főoldalt. Ezt a gate-et használja a fő plugin-fájl is a
+// betűtípus / CSS / JS betöltéséhez, így a plugin stílusa NEM szennyezi a
+// téma (Kadence) által rendezett többi oldalt.
 function tpk_is_managed_request() {
-    return is_front_page()
-        || is_page()
-        || is_home()
-        || is_singular( array( 'post', 'ajanlat', 'uticel' ) );
+    return is_front_page();
 }
 
 add_filter( 'template_include', function( $template ) {
     if ( is_front_page() ) {
         $custom = TPK_PATH . 'templates/front-page.php';
-        return file_exists( $custom ) ? $custom : $template;
-    }
-
-    if ( tpk_is_managed_request() ) {
-        $custom = TPK_PATH . 'templates/page-wrapper.php';
         return file_exists( $custom ) ? $custom : $template;
     }
 
