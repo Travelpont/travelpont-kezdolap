@@ -132,3 +132,15 @@ function tpk_kapcsolat_url() {
     $page = get_page_by_path( $slug );
     return $page ? get_permalink( $page ) : '';
 }
+
+// ── Márka-képek (Kezdőlap admin beállítás → Márka-képek) – ha nincs feltöltve, ─
+// ── üres string, a sablon a CSS-placeholderre esik vissza ─────────────────────
+function tpk_logo_url() {
+    $id = (int) tpk_get_settings()['logo_kep_id'];
+    return $id ? wp_get_attachment_image_url( $id, 'medium' ) : '';
+}
+
+function tpk_hero_kep_url() {
+    $id = (int) tpk_get_settings()['hero_kep_id'];
+    return $id ? wp_get_attachment_image_url( $id, 'large' ) : '';
+}

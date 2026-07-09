@@ -15,6 +15,7 @@ $tpk_pontok    = tpk_miert_mi_pontok();
 
 $tpk_url_ajanlatok = tpk_ajanlatok_url();
 $tpk_url_utikalauz = tpk_utikalauz_url();
+$tpk_hero_kep_url  = tpk_hero_kep_url();
 
 $tpk_tagline = get_bloginfo( 'description' );
 $tpk_title   = $tpk_tagline ? get_bloginfo( 'name' ) . ' – ' . $tpk_tagline : get_bloginfo( 'name' );
@@ -55,8 +56,9 @@ $tpk_title   = $tpk_tagline ? get_bloginfo( 'name' ) . ' – ' . $tpk_tagline : 
                 <span class="tpk-hero-note">Ingyenes · nincs regisztráció</span>
             </div>
         </div>
-        <div class="tpk-hero-visual">
-            <span class="tpk-placeholder-label">úti cél / hero fotó helye</span>
+        <div class="tpk-hero-visual<?php echo $tpk_hero_kep_url ? '' : ' tpk-hero-visual--placeholder'; ?>"
+             <?php if ( $tpk_hero_kep_url ) : ?>style="background-image:url('<?php echo esc_url( $tpk_hero_kep_url ); ?>');"<?php endif; ?>>
+            <?php if ( ! $tpk_hero_kep_url ) : ?><span class="tpk-placeholder-label">úti cél / hero fotó helye</span><?php endif; ?>
         </div>
     </section>
 

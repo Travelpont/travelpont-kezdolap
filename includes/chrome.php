@@ -16,11 +16,16 @@ function tpk_render_nav() {
     $tpk_url_utikalauz = tpk_utikalauz_url();
     $tpk_url_rolunk    = tpk_rolunk_url();
     $tpk_url_kapcsolat = tpk_kapcsolat_url();
+    $tpk_logo_url      = tpk_logo_url();
     ?>
     <nav class="tpk-nav">
         <a class="tpk-nav-brand-link" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-            <span class="tpk-logo-badge"><span class="tpk-logo-plane"></span></span>
-            <span class="tpk-logo-text"><?php bloginfo( 'name' ); ?></span>
+            <?php if ( $tpk_logo_url ) : ?>
+                <img class="tpk-logo-img" src="<?php echo esc_url( $tpk_logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+            <?php else : ?>
+                <span class="tpk-logo-badge"><span class="tpk-logo-plane"></span></span>
+                <span class="tpk-logo-text"><?php bloginfo( 'name' ); ?></span>
+            <?php endif; ?>
         </a>
         <button type="button" class="tpk-nav-toggle" aria-expanded="false" aria-controls="tpk-nav-menu" aria-label="Menü megnyitása">
             <span class="tpk-nav-toggle-bar"></span>

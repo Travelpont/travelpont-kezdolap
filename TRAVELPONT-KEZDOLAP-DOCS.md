@@ -1,6 +1,6 @@
 # Travelpont Kezdőoldal plugin – dokumentáció
 
-> Verzió: 1.3.0 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
+> Verzió: 1.4.0 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
 > követi (`D:\travelpont.hu\_Saját_pluginek\`)
 > SZABÁLY: minden módosításkor verziót emelünk a fő fájl fejlécében
 > (cache-buster + követhetőség).
@@ -84,7 +84,9 @@ travelpont-kezdolap/
 │   └── page-wrapper.php        ← ua. minden MÁS kezelt oldalhoz (lásd fent)
 └── assets/
     ├── css/frontend.css        ← a mockup 1:1 lefordítása + reszponzív töréspontok, branding CSS-változókban
-    └── js/frontend.js          ← mobil hamburger-menü nyit/zár
+    └── js/
+        ├── frontend.js         ← mobil hamburger-menü nyit/zár (frontend)
+        └── admin-media.js      ← Logó/Hero fotó feltöltő gombok (csak a "Kezdőlap" admin oldalon)
 ```
 
 ## Reszponzivitás (v1.3.0-tól)
@@ -162,6 +164,31 @@ kódszintű megoldás is működik továbbra is, csak most már nem kötelező.
 **Amit az admin felület NEM tud:** elrendezés, design, CSS, szekciók
 sorrendje, a lekérdezések (`tpk_*_query_args`) módosítása – ezekhez továbbra
 is a plugin kódjához kell nyúlni.
+
+### Márka-képek (Logó, Hero fotó) – v1.4.0
+
+A "Kezdőlap" admin oldal tetején két kép-feltöltő mező van (natív WP
+média-feltöltő, `wp.media()` – `assets/js/admin-media.js`, csak a saját
+admin oldalon töltődik be, `admin_enqueue_scripts`-szel szűrve). A kiválasztott
+attachment ID a `tpk_settings['logo_kep_id']` / `['hero_kep_id']` alatt
+tárolódik, a `content-helpers.php` `tpk_logo_url()` / `tpk_hero_kep_url()`
+függvényei olvassák ki (`wp_get_attachment_image_url()`).
+
+- **Logó** – ha be van állítva, egy `<img class="tpk-logo-img">` váltja fel a
+  CSS-ből rajzolt jelvényes/repülős placeholdert a nav-ban
+  (`includes/chrome.php` → `tpk_render_nav()`).
+- **Hero fotó** – ha be van állítva, `background-image`-ként kerül a
+  `.tpk-hero-visual`-ra a csíkos placeholder helyett
+  (`templates/front-page.php`).
+
+**FONTOS – ez nem vonatkozik a többi tartalmi képre.** Az Ajánlatok/
+Úticélok/Blog kártyák borítóképei a szokásos WordPress Kiemelt kép
+(`has_post_thumbnail()`) mechanizmuson mennek, ez változatlan – csak a
+Logó és a Hero fotó speciális, mert azoknak nincs "post"-juk, amihez
+Kiemelt képet lehetne rendelni, ezért kaptak saját feltöltő mezőt a
+plugin beállításai közt. Egyik kép SEM kerül a plugin kódmappájába
+(`assets/`) – az kizárólag a plugin SAJÁT, git-verziózott CSS/JS
+eszközeinek a helye, nem szerkesztői tartalomé.
 
 ## Hogyan bővítsd kódból?
 

@@ -28,6 +28,8 @@ function tpk_settings_defaults() {
         'zaro_cta_gomb_szoveg'  => 'Nézd meg az összes ajánlatot',
         'instagram_link'        => '',
         'facebook_link'         => '',
+        'logo_kep_id'           => 0,
+        'hero_kep_id'           => 0,
         'miert_mi'              => array(
             array( 'title' => 'Valódi ember válogat', 'text' => 'Minden ajánlatot élő utazási szakértő néz át, mielőtt kikerül az oldalra.', 'ikon' => 'circle' ),
             array( 'title' => 'Átlátható árbontás', 'text' => 'Mindig külön látod a repjegy és a szállás árát – nincs elrejtett tétel.', 'ikon' => 'square' ),
@@ -63,6 +65,17 @@ add_action( 'admin_menu', function() {
     );
 } );
 
+// ── Média-feltöltő (Logó, Hero fotó) – csak a saját beállítási oldalon ────────
+add_action( 'admin_enqueue_scripts', function( $hook ) {
+    if ( 'toplevel_page_tpk-settings' !== $hook ) return;
+    wp_enqueue_media();
+    wp_enqueue_script(
+        'tpk-admin-media',
+        TPK_URL . 'assets/js/admin-media.js',
+        array( 'jquery' ), TPK_VERSION, true
+    );
+} );
+
 function tpk_sanitize_settings( $input ) {
     $defaults    = tpk_settings_defaults();
     $megengedett = array( 'circle', 'square', 'loader', 'bag' );
@@ -80,6 +93,8 @@ function tpk_sanitize_settings( $input ) {
     $out['zaro_cta_gomb_szoveg']  = sanitize_text_field( $input['zaro_cta_gomb_szoveg'] ?? $defaults['zaro_cta_gomb_szoveg'] );
     $out['instagram_link']        = esc_url_raw( $input['instagram_link'] ?? '' );
     $out['facebook_link']         = esc_url_raw( $input['facebook_link'] ?? '' );
+    $out['logo_kep_id']           = absint( $input['logo_kep_id'] ?? 0 );
+    $out['hero_kep_id']           = absint( $input['hero_kep_id'] ?? 0 );
 
     $out['miert_mi'] = array();
     for ( $i = 0; $i < 4; $i++ ) {
@@ -94,6 +109,21 @@ function tpk_sanitize_settings( $input ) {
     return $out;
 }
 
+// ── Média-feltöltő mező kirajzolása (Logó / Hero fotó) ─────────────────────
+function tpk_media_mezo( $field_key, $attachment_id ) {
+    $url = $attachment_id ? wp_get_attachment_image_url( $attachment_id, 'medium' ) : '';
+    ?>
+    <div class="tpk-media-field" data-field="<?php echo esc_attr( $field_key ); ?>">
+        <div class="tpk-media-preview">
+            <?php if ( $url ) : ?><img src="<?php echo esc_url( $url ); ?>" style="max-width:220px;height:auto;display:block;margin-bottom:10px;border-radius:8px;"><?php endif; ?>
+        </div>
+        <input type="hidden" class="tpk-media-id" name="tpk_settings[<?php echo esc_attr( $field_key ); ?>]" value="<?php echo esc_attr( $attachment_id ); ?>">
+        <button type="button" class="button tpk-media-select">Kép kiválasztása</button>
+        <button type="button" class="button tpk-media-remove" <?php echo $attachment_id ? '' : 'style="display:none;"'; ?>>Kép törlése</button>
+    </div>
+    <?php
+}
+
 // ── Admin oldal ────────────────────────────────────────────────────────────
 function tpk_render_settings_page() {
     if ( ! current_user_can( 'manage_options' ) ) return;
@@ -104,6 +134,24 @@ function tpk_render_settings_page() {
         <p>Itt szerkesztheted a kezdőlap statikus szövegeit kód nélkül. Az elrendezés/design módosításához továbbra is a plugin kódjához kell nyúlni.</p>
         <form method="post" action="options.php">
             <?php settings_fields( 'tpk_settings_group' ); ?>
+
+            <h2 class="title">Márka-képek</h2>
+            <table class="form-table" role="presentation">
+                <tr>
+                    <th>Logó</th>
+                    <td>
+                        <?php tpk_media_mezo( 'logo_kep_id', $s['logo_kep_id'] ); ?>
+                        <p class="description">Ha üresen hagyod, a jelvényes/repülős CSS-logó jelenik meg (mint eddig).</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Hero fotó</th>
+                    <td>
+                        <?php tpk_media_mezo( 'hero_kep_id', $s['hero_kep_id'] ); ?>
+                        <p class="description">Ha üresen hagyod, a csíkos placeholder jelenik meg a főoldal hero szekciójában.</p>
+                    </td>
+                </tr>
+            </table>
 
             <h2 class="title">Navigáció</h2>
             <table class="form-table" role="presentation">

@@ -99,6 +99,12 @@ body.tpk-managed-page {
     display: block;
 }
 
+.tpk-logo-img {
+    height: 40px;
+    width: auto;
+    display: block;
+}
+
 .tpk-logo-text {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
@@ -128,7 +134,7 @@ body.tpk-managed-page {
 }
 
 .tpk-nav-toggle {
-    display: none;
+    display: none !important; /* más plugin (pl. Autoptimize/Unlimited Elements) globális gomb-stílusai ellen védve */
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -245,11 +251,17 @@ body.tpk-managed-page {
     width: 440px;
     height: 400px;
     border-radius: 24px;
-    background: repeating-linear-gradient(135deg, #DCE9F7, #DCE9F7 14px, #D1E2F4 14px, #D1E2F4 28px);
+    background-size: cover;
+    background-position: center;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.tpk-hero-visual--placeholder {
+    background-color: transparent;
+    background-image: repeating-linear-gradient(135deg, #DCE9F7, #DCE9F7 14px, #D1E2F4 14px, #D1E2F4 28px);
     border: 1px solid #CFE0F2;
 }
 
@@ -861,7 +873,7 @@ body.tpk-managed-page {
         flex-wrap: wrap;
     }
 
-    .tpk-nav-toggle { display: flex; }
+    .tpk-nav-toggle { display: flex !important; }
 
     .tpk-nav-menu {
         display: none;
