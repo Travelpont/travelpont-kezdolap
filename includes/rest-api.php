@@ -115,6 +115,11 @@ function tpk_api_save( WP_REST_Request $req ) {
     $config = tpk_sanitize_modulok( $input );
     update_option( 'tpk_modulok', $config, true );
 
+    // LiteSpeed oldal-cache: a főoldal automatikus ürítése mentés után, hogy a
+    // látogatók azonnal az új változatot lássák. Ha a LiteSpeed Cache plugin
+    // nincs telepítve, a do_action egyszerűen nem csinál semmit.
+    do_action( 'litespeed_purge_url', home_url( '/' ) );
+
     return rest_ensure_response( tpk_api_format( $config ) );
 }
 
