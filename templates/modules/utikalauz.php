@@ -12,7 +12,7 @@ $tpk_url_utikalauz = tpk_utikalauz_url();
 ?>
     <!-- ÚTIKALAUZ / BLOG -->
     <?php if ( $tpk_cikkek instanceof WP_Query && $tpk_cikkek->have_posts() ) : ?>
-        <section id="blog" class="tpk-blog">
+        <section id="blog" class="tpk-blog<?php echo esc_attr( tpk_megj_osztalyok( 'utikalauz', $tpk_b ) ); ?>">
             <div class="tpk-section-head">
                 <div>
                     <p class="tpk-eyebrow"><?php echo esc_html( $tpk_b['eyebrow'] ); ?></p>

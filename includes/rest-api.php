@@ -36,6 +36,12 @@ add_action( 'rest_api_init', function() {
         ),
     ) );
 
+    register_rest_route( 'tpk/v1', '/kezdolap/elonezet', array(
+        'methods'             => WP_REST_Server::CREATABLE,
+        'callback'            => 'tpk_api_elonezet',
+        'permission_callback' => 'tpk_api_auth',
+    ) );
+
     register_rest_route( 'tpk/v1', '/kezdolap/kep', array(
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => 'tpk_api_sideload_image',
@@ -123,6 +129,30 @@ function tpk_api_save( WP_REST_Request $req ) {
     return rest_ensure_response( tpk_api_format( $config ) );
 }
 
+// ── POST /tpk/v1/kezdolap/elonezet – Vázlat-előnézet (mentés NÉLKÜL) ───────────
+// A beküldött configot szanitizálva 15 percre transientbe teszi, és visszaadja
+// a token-alapú előnézeti URL-t. Az opciót nem érinti — a front-end a
+// tpk_get_modulok()-ban ismeri fel a tokent (lásd modules.php), a cache/noindex
+// védelem a template-loader.php-ban van.
+function tpk_api_elonezet( WP_REST_Request $req ) {
+    $input = $req->get_json_params();
+    if ( ! is_array( $input ) ) {
+        return new WP_Error( 'invalid_body', 'Hiányzó vagy érvénytelen JSON törzs', array( 'status' => 400 ) );
+    }
+    if ( strlen( wp_json_encode( $input ) ) > 200 * 1024 ) {
+        return new WP_Error( 'too_large', 'A konfiguráció túl nagy (max. 200 KB)', array( 'status' => 400 ) );
+    }
+
+    $config = tpk_sanitize_modulok( $input );
+    $token  = wp_generate_password( 20, false, false );
+    set_transient( 'tpk_elonezet_' . $token, $config, 15 * MINUTE_IN_SECONDS );
+
+    return rest_ensure_response( array(
+        'url'         => add_query_arg( 'tpk_elonezet', $token, home_url( '/' ) ),
+        'lejarat_perc' => 15,
+    ) );
+}
+
 // ── A teljes konfiguráció szanitizálása ────────────────────────────────────────
 // Elv: ismeretlen kulcs/típus eldobva, hiányzó singleton modul defaultból
 // pótolva (tpk_get_modulok() amúgy is pótolná) – csonka konfiguráció sosem
@@ -173,9 +203,58 @@ function tpk_sanitize_modulok( $input ) {
     return $config;
 }
 
+// ── 🎨 Megjelenés-beállítások szanitizálása (típusonkénti enum-whitelist) ──────
+function tpk_sanitize_megjelenes( $tipus, $input, $alap ) {
+    $hatterek = array(
+        'hero'      => array( 'kek', 'feher', 'vilagos' ),
+        'ajanlatok' => array( 'feher', 'kek', 'vilagos' ),
+        'uticelok'  => array( 'sotet', 'feher', 'kek' ),
+        'miert_mi'  => array( 'feher', 'kek', 'vilagos' ),
+        'utikalauz' => array( 'vilagos', 'feher', 'kek' ),
+        'zaro_cta'  => array( 'sotet', 'bezs' ),
+    );
+    $oszlopok = array(
+        'ajanlatok' => array( 2, 3 ),
+        'uticelok'  => array( 2, 3, 4 ),
+        'utikalauz' => array( 2, 3 ),
+    );
+
+    $ki = array();
+    foreach ( $alap as $kulcs => $default ) {
+        $ertek = $input[ $kulcs ] ?? $default;
+        switch ( $kulcs ) {
+            case 'hatter':
+                $ki[ $kulcs ] = in_array( $ertek, $hatterek[ $tipus ] ?? array(), true ) ? $ertek : $default;
+                break;
+            case 'oszlopok':
+                $ki[ $kulcs ] = in_array( (int) $ertek, $oszlopok[ $tipus ] ?? array(), true ) ? (int) $ertek : $default;
+                break;
+            case 'kep_arany':
+            case 'kep_illesztes':
+                $ki[ $kulcs ] = in_array( $ertek, array( 'kivagas', 'teljes' ), true ) ? $ertek : $default;
+                break;
+            case 'stilus':
+                $ki[ $kulcs ] = in_array( $ertek, array( 'magazin', 'mozaik', 'kartya' ), true ) ? $ertek : $default;
+                break;
+            default:
+                $ki[ $kulcs ] = $default;
+        }
+    }
+    return $ki;
+}
+
 // ── Modulonkénti mező-szanitizálás (kulcs-szűrés a default-séma szerint) ───────
 function tpk_sanitize_modul_beallitasok( $tipus, $input ) {
     $b = tpk_modul_alap( $tipus ); // a default kulcskészlet a séma
+
+    // 🎨 Megjelenés minden olyan típusnál, ahol a séma tartalmazza
+    if ( isset( $b['megjelenes'] ) ) {
+        $b['megjelenes'] = tpk_sanitize_megjelenes(
+            $tipus,
+            isset( $input['megjelenes'] ) && is_array( $input['megjelenes'] ) ? $input['megjelenes'] : array(),
+            $b['megjelenes']
+        );
+    }
 
     switch ( $tipus ) {
         case 'hero':

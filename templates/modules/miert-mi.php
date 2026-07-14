@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 $tpk_pontok = apply_filters( 'tpk_miert_mi_pontok', $tpk_b['pontok'] );
 ?>
     <!-- MIÉRT MI? -->
-    <section class="tpk-section">
+    <section class="tpk-section<?php echo esc_attr( tpk_megj_osztalyok( 'miert_mi', $tpk_b ) ); ?>">
         <div class="tpk-why-head">
             <p class="tpk-eyebrow"><?php echo esc_html( $tpk_b['eyebrow'] ); ?></p>
             <h2 class="tpk-section-title"><?php echo esc_html( $tpk_b['cim'] ); ?></h2>

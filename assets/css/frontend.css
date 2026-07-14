@@ -988,3 +988,148 @@ body.tpk-managed-page {
 .tpk-szabad--sotet a {
     color: inherit;
 }
+
+/* ═══ 🎨 Megjelenés-módosítók (Portál "Megjelenés" beállítások) ═══════════════
+   A tpk_megj_osztalyok() CSAK nem-alapértelmezett értéknél teszi fel ezeket a
+   szekció-tagre — alapértelmezésben a markup (és így a kimenet) változatlan. */
+
+/* ── Szekció-hátterek (márka-paletta) ── */
+.tpk-hatter-feher   { background: #FFFFFF; }
+.tpk-hatter-kek     { background: var(--tpk-bg-blue); }
+.tpk-hatter-vilagos { background: var(--tpk-bg-blog); }
+.tpk-hatter-sotet   { background: var(--tpk-dark); }
+.tpk-hatter-bezs    { background: var(--tpk-secondary); }
+
+/* Világos háttérre váltott Úticélok szekció: a sötét háttérhez igazított
+   szövegszínek visszafordítása, hogy olvasható maradjon */
+.tpk-destinations.tpk-hatter-feher .tpk-eyebrow--onDark,
+.tpk-destinations.tpk-hatter-kek .tpk-eyebrow--onDark { color: var(--tpk-secondary); }
+.tpk-destinations.tpk-hatter-feher .tpk-section-title--onDark,
+.tpk-destinations.tpk-hatter-kek .tpk-section-title--onDark { color: var(--tpk-text); }
+.tpk-destinations.tpk-hatter-feher .tpk-empty--onDark,
+.tpk-destinations.tpk-hatter-kek .tpk-empty--onDark { color: var(--tpk-text); }
+
+/* ── Oszlopszám ── */
+.tpk-oszlop-2 .tpk-grid-3 { grid-template-columns: repeat(2, 1fr); }
+.tpk-oszlop-4 .tpk-grid-3 { grid-template-columns: repeat(4, 1fr); }
+
+/* ── Kép: teljes 16:9, sosem vág (a feliratos borítóképekhez) ── */
+.tpk-kep-teljes .tpk-offer-media,
+.tpk-kep-teljes .tpk-article-media {
+    height: auto;
+    aspect-ratio: 16 / 9;
+}
+
+.tpk-hero.tpk-kep-teljes .tpk-hero-visual {
+    width: 520px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* ── Úticél kártya-stílus: MOZAIK (16:9 fotó + név-sáv, mint az aloldalakon) ── */
+.tpk-dest-mozaik {
+    position: relative;
+    display: block;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border: 1px solid rgba(255, 255, 255, .08);
+    text-decoration: none;
+}
+
+.tpk-dest-mozaik img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .3s ease;
+}
+
+.tpk-dest-mozaik:hover img { transform: scale(1.03); }
+
+.tpk-dest-mozaik-ures {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(135deg, #6B7078, #6B7078 14px, #63676F 14px, #63676F 28px);
+}
+
+.tpk-dest-mozaik-nev {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 34px 20px 14px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, .65));
+    color: #FFFFFF;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+/* ── Úticél kártya-stílus: KÁRTYA (kép felül 16:9 + szöveg alatta) ── */
+.tpk-dest-csempe {
+    display: block;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #FFFFFF;
+    border: 1px solid #E9EBEE;
+    text-decoration: none;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.tpk-dest-csempe:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(30, 32, 35, .12);
+}
+
+.tpk-dest-csempe-kep {
+    display: block;
+    aspect-ratio: 16 / 9;
+    background: repeating-linear-gradient(135deg, #E6F1FB, #E6F1FB 14px, #D8E9F8 14px, #D8E9F8 28px);
+}
+
+.tpk-dest-csempe-kep img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.tpk-dest-csempe-torzs {
+    display: block;
+    padding: 18px 20px 20px;
+}
+
+.tpk-dest-csempe-nev {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--tpk-text);
+    margin-bottom: 6px;
+}
+
+.tpk-dest-csempe-blurb {
+    display: block;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #6B7078;
+}
+
+/* ── A módosítók reszponzív felülírásai (a fő töréspontokkal azonosan) ── */
+@media (max-width: 1024px) {
+    .tpk-oszlop-2 .tpk-grid-3,
+    .tpk-oszlop-4 .tpk-grid-3 { grid-template-columns: repeat(2, 1fr); }
+
+    .tpk-hero.tpk-kep-teljes .tpk-hero-visual { width: 320px; }
+}
+
+@media (max-width: 768px) {
+    .tpk-oszlop-2 .tpk-grid-3,
+    .tpk-oszlop-4 .tpk-grid-3 { grid-template-columns: 1fr; }
+
+    .tpk-hero.tpk-kep-teljes .tpk-hero-visual { width: 100%; height: auto; }
+}

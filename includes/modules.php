@@ -27,6 +27,7 @@ function tpk_modul_alap( $tipus ) {
                 'cta_szoveg'   => 'Nézd meg az ajánlatokat',
                 'megjegyzes'   => 'Ingyenes · nincs regisztráció',
                 'hero_kep_id'  => 0,
+                'megjelenes'   => array( 'kep_illesztes' => 'kivagas', 'hatter' => 'kek' ),
             );
         case 'ajanlatok':
             return array(
@@ -37,6 +38,7 @@ function tpk_modul_alap( $tipus ) {
                 'valogatas'        => 'auto',
                 'kivalasztott_idk' => array(),
                 'ures_szoveg'      => 'Jelenleg nincs feltöltött ajánlat – nézz vissza hamarosan!',
+                'megjelenes'       => array( 'kep_arany' => 'kivagas', 'oszlopok' => 3, 'hatter' => 'feher' ),
             );
         case 'uticelok':
             return array(
@@ -46,6 +48,7 @@ function tpk_modul_alap( $tipus ) {
                 'valogatas'        => 'auto',
                 'kivalasztott_idk' => array(),
                 'ures_szoveg'      => 'Jelenleg nincs feltöltött úticél.',
+                'megjelenes'       => array( 'stilus' => 'magazin', 'oszlopok' => 3, 'hatter' => 'sotet' ),
             );
         case 'miert_mi':
             return array(
@@ -57,6 +60,7 @@ function tpk_modul_alap( $tipus ) {
                     array( 'title' => 'Folyamatosan frissítve', 'text' => 'Naponta figyeljük a piacot, hogy a legjobb ajánlatok kerüljenek fel.', 'ikon' => 'loader' ),
                     array( 'title' => 'Megbízható partnerek', 'text' => 'Csak ellenőrzött légitársaságokkal és szállásokkal dolgozunk együtt.', 'ikon' => 'bag' ),
                 ),
+                'megjelenes' => array( 'hatter' => 'feher' ),
             );
         case 'utikalauz':
             return array(
@@ -64,6 +68,7 @@ function tpk_modul_alap( $tipus ) {
                 'cim'         => 'Olvasnivaló indulás előtt',
                 'link_szoveg' => 'Az összes cikk →',
                 'darab'       => 3,
+                'megjelenes'  => array( 'kep_arany' => 'kivagas', 'oszlopok' => 3, 'hatter' => 'vilagos' ),
             );
         case 'zaro_cta':
             return array(
@@ -72,6 +77,7 @@ function tpk_modul_alap( $tipus ) {
                 'gomb_szoveg'    => 'Nézd meg az összes ajánlatot',
                 'instagram_link' => '',
                 'facebook_link'  => '',
+                'megjelenes'     => array( 'hatter' => 'sotet' ),
             );
         case 'szabad':
             return array(
@@ -149,17 +155,44 @@ function tpk_modulok_migralt_defaults() {
     return $config;
 }
 
-// ── A teljes konfiguráció betöltése (mentett vagy migrált) ────────────────────
+// ── A teljes konfiguráció betöltése (előnézet > mentett > migrált) ────────────
 function tpk_get_modulok() {
     static $cache = null;
     if ( null !== $cache ) return $cache;
 
-    $mentett = get_option( 'tpk_modulok' );
-    if ( ! is_array( $mentett ) || empty( $mentett['modulok'] ) || ! is_array( $mentett['modulok'] ) ) {
+    $forras = null;
+
+    // Élő előnézet: a Portál "👁️ Előnézet" gombja token-alapú vázlat-configot
+    // tesz transientbe (tpk_api_elonezet) — érvényes tokennél AZT rendereljük,
+    // az opcióhoz nem nyúlunk. A cache/noindex védelem a template-loader.php-ban.
+    if ( isset( $_GET['tpk_elonezet'] ) ) {
+        $token = preg_replace( '/[^A-Za-z0-9]/', '', (string) $_GET['tpk_elonezet'] );
+        if ( $token ) {
+            $vazlat = get_transient( 'tpk_elonezet_' . $token );
+            if ( is_array( $vazlat ) && ! empty( $vazlat['modulok'] ) && is_array( $vazlat['modulok'] ) ) {
+                $forras = $vazlat;
+            }
+        }
+    }
+
+    if ( null === $forras ) {
+        $mentett = get_option( 'tpk_modulok' );
+        if ( is_array( $mentett ) && ! empty( $mentett['modulok'] ) && is_array( $mentett['modulok'] ) ) {
+            $forras = $mentett;
+        }
+    }
+
+    if ( null === $forras ) {
         $cache = tpk_modulok_migralt_defaults();
         return $cache;
     }
 
+    $cache = tpk_config_normalizalas( $forras );
+    return $cache;
+}
+
+// ── Mentett/vázlat konfiguráció normalizálása (defaults-fésülés, pótlás) ──────
+function tpk_config_normalizalas( $mentett ) {
     $defaults = tpk_modulok_defaults();
     $config   = array(
         'verzio'  => isset( $mentett['verzio'] ) ? (int) $mentett['verzio'] : 1,
@@ -177,10 +210,18 @@ function tpk_get_modulok() {
         if ( 'szabad' !== $tipus && isset( $megvan[ $tipus ] ) ) continue; // duplikált singleton: az első nyer
 
         // Modulonkénti mély default-fésülés: régi mentés + új mező sosem ad üres mezőt
-        $beallitasok = array_merge(
-            tpk_modul_alap( $tipus ),
-            isset( $modul['beallitasok'] ) && is_array( $modul['beallitasok'] ) ? $modul['beallitasok'] : array()
-        );
+        $alap      = tpk_modul_alap( $tipus );
+        $mentett_b = isset( $modul['beallitasok'] ) && is_array( $modul['beallitasok'] ) ? $modul['beallitasok'] : array();
+        $beallitasok = array_merge( $alap, $mentett_b );
+
+        // A 'megjelenes' AL-TÖMB külön fésülést kap (az array_merge sekély —
+        // megjelenes nélküli régi mentésnél is teljes kulcskészlet kell)
+        if ( isset( $alap['megjelenes'] ) ) {
+            $beallitasok['megjelenes'] = array_merge(
+                $alap['megjelenes'],
+                isset( $mentett_b['megjelenes'] ) && is_array( $mentett_b['megjelenes'] ) ? $mentett_b['megjelenes'] : array()
+            );
+        }
 
         $config['modulok'][] = array(
             'tipus'       => $tipus,
@@ -199,8 +240,47 @@ function tpk_get_modulok() {
         }
     }
 
-    $cache = $config;
-    return $cache;
+    return $config;
+}
+
+// ── 🎨 Megjelenés-érték kiolvasása (defaulttal) ────────────────────────────────
+function tpk_megj( $tpk_b, $kulcs, $alap = '' ) {
+    return isset( $tpk_b['megjelenes'][ $kulcs ] ) && '' !== $tpk_b['megjelenes'][ $kulcs ]
+        ? $tpk_b['megjelenes'][ $kulcs ]
+        : $alap;
+}
+
+// ── 🎨 Módosító CSS-osztályok a szekció-tagre ─────────────────────────────────
+// KRITIKUS: alapértelmezett értékeknél ÜRES stringet ad — így a default
+// konfiguráció kimenete bitre azonos marad a módosítók bevezetése előttivel.
+function tpk_megj_osztalyok( $tipus, $tpk_b ) {
+    $alap = tpk_modul_alap( $tipus );
+    if ( empty( $alap['megjelenes'] ) ) return '';
+
+    $osztalyok = array();
+    foreach ( $alap['megjelenes'] as $kulcs => $default ) {
+        $ertek = tpk_megj( $tpk_b, $kulcs, $default );
+        if ( (string) $ertek === (string) $default ) continue;
+
+        switch ( $kulcs ) {
+            case 'hatter':
+                $osztalyok[] = 'tpk-hatter-' . $ertek;
+                break;
+            case 'oszlopok':
+                $osztalyok[] = 'tpk-oszlop-' . (int) $ertek;
+                break;
+            case 'kep_arany':
+            case 'kep_illesztes':
+                if ( 'teljes' === $ertek ) $osztalyok[] = 'tpk-kep-teljes';
+                break;
+            case 'stilus':
+                $osztalyok[] = 'tpk-dstilus-' . $ertek;
+                break;
+        }
+    }
+
+    if ( ! $osztalyok ) return '';
+    return ' ' . implode( ' ', array_map( 'sanitize_html_class', $osztalyok ) );
 }
 
 // ── Az aktív szabad szekciók összefűzött tartalma (enqueue-döntésekhez) ───────

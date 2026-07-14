@@ -11,7 +11,7 @@ $tpk_url_ajanlatok = tpk_ajanlatok_url();
 $tpk_hero_kep_url  = ! empty( $tpk_b['hero_kep_id'] ) ? wp_get_attachment_image_url( (int) $tpk_b['hero_kep_id'], 'large' ) : '';
 ?>
     <!-- HERO -->
-    <section class="tpk-hero">
+    <section class="tpk-hero<?php echo esc_attr( tpk_megj_osztalyok( 'hero', $tpk_b ) ); ?>">
         <div class="tpk-hero-copy">
             <div class="tpk-hero-badge">
                 <span class="tpk-hero-badge-dot"></span>

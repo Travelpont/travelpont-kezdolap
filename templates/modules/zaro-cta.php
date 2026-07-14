@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 $tpk_url_ajanlatok = tpk_ajanlatok_url();
 ?>
     <!-- ZÁRÓ CTA -->
-    <section class="tpk-cta">
+    <section class="tpk-cta<?php echo esc_attr( tpk_megj_osztalyok( 'zaro_cta', $tpk_b ) ); ?>">
         <div>
             <h2 class="tpk-cta-title"><?php echo esc_html( apply_filters( 'tpk_zaro_cta_cim', $tpk_b['cim'] ) ); ?></h2>
             <p class="tpk-cta-subtitle"><?php echo esc_html( apply_filters( 'tpk_zaro_cta_alcim', $tpk_b['alcim'] ) ); ?></p>

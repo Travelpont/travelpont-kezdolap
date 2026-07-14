@@ -37,3 +37,18 @@ add_filter( 'template_include', function( $template ) {
 
     return $template;
 }, 20 );
+
+// ── Élő előnézet (?tpk_elonezet=TOKEN) védelme ────────────────────────────
+// A vázlat-render sosem kerülhet az oldal-cache-be (különben a látogatók a
+// vázlatot kapnák, ill. a szerkesztő a cache-elt élő oldalt a vázlat helyett),
+// és a keresők sem indexelhetik.
+add_action( 'template_redirect', function() {
+    if ( ! isset( $_GET['tpk_elonezet'] ) || ! tpk_is_managed_request() ) return;
+    nocache_headers();
+    do_action( 'litespeed_control_set_nocache' ); // LiteSpeed Cache kizárás
+} );
+
+add_action( 'wp_head', function() {
+    if ( ! isset( $_GET['tpk_elonezet'] ) || ! tpk_is_managed_request() ) return;
+    echo '<meta name="robots" content="noindex,nofollow">' . "\n";
+}, 1 );
