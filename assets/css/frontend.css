@@ -970,3 +970,21 @@ body.tpk-managed-page {
     .tpk-offer-body,
     .tpk-article-body { padding: 18px; }
 }
+
+/* ── Szabad szekció (Portálból szerkesztett vászon-tartalom) ─────────────────
+   A .tpk-section adja a paddingot/hátteret; a tartalom olvasható hasábban fut.
+   A widget-stílusokat (tpu-*) a travelpont-uticelok frontend.css-e adja, amit
+   a plugin a főoldalon is betölt, ha van aktív szabad szekció. */
+.tpk-szabad-tartalom {
+    max-width: 880px;
+    margin: 0 auto;
+}
+
+.tpk-szabad--sotet {
+    background: var(--tpk-dark);
+    color: #E9EDF2;
+}
+
+.tpk-szabad--sotet a {
+    color: inherit;
+}

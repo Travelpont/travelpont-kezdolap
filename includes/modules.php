@@ -203,6 +203,17 @@ function tpk_get_modulok() {
     return $cache;
 }
 
+// ── Az aktív szabad szekciók összefűzött tartalma (enqueue-döntésekhez) ───────
+function tpk_szabad_tartalom_osszes() {
+    $ossz = '';
+    foreach ( tpk_get_modulok()['modulok'] as $modul ) {
+        if ( 'szabad' === $modul['tipus'] && ! empty( $modul['aktiv'] ) ) {
+            $ossz .= (string) $modul['beallitasok']['tartalom_html'];
+        }
+    }
+    return $ossz;
+}
+
 // ── Egy modul kirajzolása (típus→sablon whitelist, sosem fatal) ───────────────
 function tpk_render_modul( $tpk_modul ) {
     if ( ! is_array( $tpk_modul ) || empty( $tpk_modul['aktiv'] ) ) return;

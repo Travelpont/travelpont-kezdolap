@@ -3,7 +3,7 @@
  * Plugin Name: Travelpont Kezdőoldal
  * Plugin URI:  https://travelpont.hu
  * Description: A Travelpont kezdőoldalának teljes, jóváhagyott mockup alapján épített sablonja – ACF-mentes, önálló plugin, a Travelpont Ajánlatok / Úticélok pluginek mintájára.
- * Version:     1.6.0
+ * Version:     1.7.0
  * Author:      travelpont.hu
  * Text Domain: travelpont-kezdolap
  */
@@ -21,6 +21,7 @@ require_once TPK_PATH . 'includes/chrome.php';
 require_once TPK_PATH . 'includes/template-loader.php';
 require_once TPK_PATH . 'includes/settings.php';
 require_once TPK_PATH . 'includes/modules.php';
+require_once TPK_PATH . 'includes/rest-api.php';
 
 // ── Betűtípusok + stílus – minden, a plugin által kezelt oldalon ──────────────
 // (lásd tpk_is_managed_request() az includes/template-loader.php-ban)
@@ -49,3 +50,24 @@ add_action( 'wp_enqueue_scripts', function() {
         array(), TPK_VERSION, true
     );
 } );
+
+// ── Szabad szekció: a tpu widget-stílusok/-scriptek a főoldalon is kellenek ──
+// Priority 20: a travelpont-uticelok a saját (10-es) hookjában REGISZTRÁLJA a
+// handle-öket, és a pluginok betöltési sorrendje miatt az később fut, mint a
+// mi 10-esünk – 20-on már biztosan léteznek.
+add_action( 'wp_enqueue_scripts', function() {
+    if ( ! tpk_is_managed_request() ) return;
+
+    $szabad = tpk_szabad_tartalom_osszes();
+    if ( '' === $szabad ) return;
+
+    if ( wp_style_is( 'travelpont-uticelok', 'registered' ) ) {
+        wp_enqueue_style( 'travelpont-uticelok' );
+    }
+    if ( wp_style_is( 'travelpont-ajanlatok', 'registered' ) && false !== strpos( $szabad, 'tpu-ajanlat-widget' ) ) {
+        wp_enqueue_style( 'travelpont-ajanlatok' );
+    }
+    if ( wp_script_is( 'travelpont-uticelok-video', 'registered' ) && false !== strpos( $szabad, 'tpu-video' ) ) {
+        wp_enqueue_script( 'travelpont-uticelok-video' );
+    }
+}, 20 );
