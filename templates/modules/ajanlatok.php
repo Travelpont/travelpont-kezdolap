@@ -15,7 +15,7 @@ $tpk_kezi_idk  = ( 'kezi' === $tpk_b['valogatas'] && ! empty( $tpk_b['kivalaszto
 $tpk_ajanlatok = $tpk_kezi_idk ? tpk_get_ajanlatok( count( $tpk_kezi_idk ), $tpk_kezi_idk ) : tpk_get_ajanlatok( (int) $tpk_b['darab'] );
 ?>
     <!-- KIEMELT AJÁNLATOK -->
-    <section id="offers" class="tpk-section<?php echo esc_attr( tpk_megj_osztalyok( 'ajanlatok', $tpk_b ) ); ?>">
+    <section id="offers" class="tpk-section<?php echo esc_attr( tpk_megj_osztalyok( 'ajanlatok', $tpk_b ) ); ?>"<?php echo tpk_megj_stilus( $tpk_b ); ?>>
         <div class="tpk-section-head">
             <div>
                 <p class="tpk-eyebrow"><?php echo esc_html( $tpk_b['eyebrow'] ); ?></p>

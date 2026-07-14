@@ -164,6 +164,7 @@ function tpk_sanitize_modulok( $input ) {
             'logo_kep_id'    => absint( $input['chrome']['logo_kep_id'] ?? 0 ),
             'nav_cta_szoveg' => sanitize_text_field( $input['chrome']['nav_cta_szoveg'] ?? 'Ajánlatok böngészése' ),
         ),
+        'stilus'  => tpk_sanitize_stilus( isset( $input['stilus'] ) && is_array( $input['stilus'] ) ? $input['stilus'] : array() ),
         'modulok' => array(),
     );
 
@@ -203,15 +204,46 @@ function tpk_sanitize_modulok( $input ) {
     return $config;
 }
 
+// ── "Miért mi?" ikon-érték validálása ──────────────────────────────────────────
+// Három érvényes forma: régi CSS-ikon, beépített SVG (svg:nev — csak létező
+// fájl), szabad emoji (emoji:… max 16 bájt). Minden más → default.
+function tpk_sanitize_ikon( $ikon, $default ) {
+    if ( in_array( $ikon, array( 'circle', 'square', 'loader', 'bag' ), true ) ) {
+        return $ikon;
+    }
+    if ( preg_match( '/^svg:([a-z0-9-]{1,32})$/', $ikon, $m )
+        && file_exists( TPK_PATH . 'assets/icons/miert-mi/' . $m[1] . '.svg' ) ) {
+        return $ikon;
+    }
+    if ( 0 === strpos( $ikon, 'emoji:' ) ) {
+        $emoji = sanitize_text_field( substr( $ikon, 6 ) );
+        if ( '' !== $emoji && strlen( $emoji ) <= 16 ) {
+            return 'emoji:' . $emoji;
+        }
+    }
+    return $default;
+}
+
+// ── 🎨 Globális márka-paletta szanitizálása (csak hex vagy üres) ───────────────
+function tpk_sanitize_stilus( $input ) {
+    $ki = array();
+    foreach ( tpk_stilus_alap() as $kulcs => $default ) {
+        $ertek = (string) ( $input[ $kulcs ] ?? '' );
+        $ki[ $kulcs ] = preg_match( '/^#[0-9a-fA-F]{6}$/', $ertek ) ? $ertek : '';
+    }
+    return $ki;
+}
+
 // ── 🎨 Megjelenés-beállítások szanitizálása (típusonkénti enum-whitelist) ──────
 function tpk_sanitize_megjelenes( $tipus, $input, $alap ) {
+    // Az 'egyeni' minden típusnál engedélyezett (a színt a hatter_szin adja)
     $hatterek = array(
-        'hero'      => array( 'kek', 'feher', 'vilagos' ),
-        'ajanlatok' => array( 'feher', 'kek', 'vilagos' ),
-        'uticelok'  => array( 'sotet', 'feher', 'kek' ),
-        'miert_mi'  => array( 'feher', 'kek', 'vilagos' ),
-        'utikalauz' => array( 'vilagos', 'feher', 'kek' ),
-        'zaro_cta'  => array( 'sotet', 'bezs' ),
+        'hero'      => array( 'kek', 'feher', 'vilagos', 'egyeni' ),
+        'ajanlatok' => array( 'feher', 'kek', 'vilagos', 'egyeni' ),
+        'uticelok'  => array( 'sotet', 'feher', 'kek', 'egyeni' ),
+        'miert_mi'  => array( 'feher', 'kek', 'vilagos', 'egyeni' ),
+        'utikalauz' => array( 'vilagos', 'feher', 'kek', 'egyeni' ),
+        'zaro_cta'  => array( 'sotet', 'bezs', 'egyeni' ),
     );
     $oszlopok = array(
         'ajanlatok' => array( 2, 3 ),
@@ -226,12 +258,25 @@ function tpk_sanitize_megjelenes( $tipus, $input, $alap ) {
             case 'hatter':
                 $ki[ $kulcs ] = in_array( $ertek, $hatterek[ $tipus ] ?? array(), true ) ? $ertek : $default;
                 break;
+            case 'hatter_szin':
+                $ki[ $kulcs ] = preg_match( '/^#[0-9a-fA-F]{6}$/', (string) $ertek ) ? (string) $ertek : '';
+                break;
+            case 'szoveg_szin':
+                $ki[ $kulcs ] = in_array( $ertek, array( 'auto', 'sotet', 'vilagos' ), true ) ? $ertek : $default;
+                break;
             case 'oszlopok':
                 $ki[ $kulcs ] = in_array( (int) $ertek, $oszlopok[ $tipus ] ?? array(), true ) ? (int) $ertek : $default;
                 break;
             case 'kep_arany':
             case 'kep_illesztes':
                 $ki[ $kulcs ] = in_array( $ertek, array( 'kivagas', 'teljes' ), true ) ? $ertek : $default;
+                break;
+            case 'kep_oldal':
+                $ki[ $kulcs ] = in_array( $ertek, array( 'jobb', 'bal' ), true ) ? $ertek : $default;
+                break;
+            case 'betumeret':
+            case 'cim_meret':
+                $ki[ $kulcs ] = in_array( $ertek, array( 'kisebb', 'normal', 'nagyobb' ), true ) ? $ertek : $default;
                 break;
             case 'stilus':
                 $ki[ $kulcs ] = in_array( $ertek, array( 'magazin', 'mozaik', 'kartya' ), true ) ? $ertek : $default;
@@ -298,14 +343,13 @@ function tpk_sanitize_modul_beallitasok( $tipus, $input ) {
             $b['eyebrow'] = sanitize_text_field( $input['eyebrow'] ?? $b['eyebrow'] );
             $b['cim']     = sanitize_text_field( $input['cim'] ?? $b['cim'] );
 
-            $ikonok = array( 'circle', 'square', 'loader', 'bag' );
             $pontok = array();
             for ( $i = 0; $i < 4; $i++ ) {
                 $pont     = isset( $input['pontok'][ $i ] ) && is_array( $input['pontok'][ $i ] ) ? $input['pontok'][ $i ] : array();
                 $pontok[] = array(
                     'title' => sanitize_text_field( $pont['title'] ?? $b['pontok'][ $i ]['title'] ),
                     'text'  => sanitize_text_field( $pont['text'] ?? $b['pontok'][ $i ]['text'] ),
-                    'ikon'  => in_array( $pont['ikon'] ?? '', $ikonok, true ) ? $pont['ikon'] : $b['pontok'][ $i ]['ikon'],
+                    'ikon'  => tpk_sanitize_ikon( (string) ( $pont['ikon'] ?? '' ), $b['pontok'][ $i ]['ikon'] ),
                 );
             }
             $b['pontok'] = $pontok;

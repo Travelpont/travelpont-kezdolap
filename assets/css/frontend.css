@@ -1133,3 +1133,157 @@ body.tpk-managed-page {
 
     .tpk-hero.tpk-kep-teljes .tpk-hero-visual { width: 100%; height: auto; }
 }
+
+/* ═══ 🎨 Finomhangolás: betűméret-fokozatok, szövegszín, ikonok (v1.9.0) ═════ */
+
+/* ── Betűméret-fokozatok: a szekció szövegei arányosan skálázódnak ── */
+.tpk-betu-kisebb  { --tpk-betu: .88; }
+.tpk-betu-nagyobb { --tpk-betu: 1.16; }
+
+.tpk-betu-kisebb .tpk-eyebrow,
+.tpk-betu-nagyobb .tpk-eyebrow { font-size: calc(14px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-section-title,
+.tpk-betu-nagyobb .tpk-section-title { font-size: calc(36px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-section-link,
+.tpk-betu-nagyobb .tpk-section-link { font-size: calc(15px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-hero-badge,
+.tpk-betu-nagyobb .tpk-hero-badge { font-size: calc(13px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-hero-subtitle,
+.tpk-betu-nagyobb .tpk-hero-subtitle { font-size: calc(19px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-hero-note,
+.tpk-betu-nagyobb .tpk-hero-note { font-size: calc(14px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-offer-dest,
+.tpk-betu-nagyobb .tpk-offer-dest { font-size: calc(21px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-offer-dates,
+.tpk-betu-nagyobb .tpk-offer-dates { font-size: calc(13px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-price-row,
+.tpk-betu-nagyobb .tpk-price-row { font-size: calc(14px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-dest-name,
+.tpk-betu-nagyobb .tpk-dest-name { font-size: calc(26px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-dest-blurb,
+.tpk-betu-nagyobb .tpk-dest-blurb { font-size: calc(14px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-dest-mozaik-nev,
+.tpk-betu-nagyobb .tpk-dest-mozaik-nev { font-size: calc(20px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-dest-csempe-nev,
+.tpk-betu-nagyobb .tpk-dest-csempe-nev { font-size: calc(19px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-dest-csempe-blurb,
+.tpk-betu-nagyobb .tpk-dest-csempe-blurb { font-size: calc(14px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-reason-title,
+.tpk-betu-nagyobb .tpk-reason-title { font-size: calc(18px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-reason-text,
+.tpk-betu-nagyobb .tpk-reason-text { font-size: calc(15px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-article-category,
+.tpk-betu-nagyobb .tpk-article-category { font-size: calc(13px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-article-title,
+.tpk-betu-nagyobb .tpk-article-title { font-size: calc(19px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-article-excerpt,
+.tpk-betu-nagyobb .tpk-article-excerpt { font-size: calc(14px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-cta-title,
+.tpk-betu-nagyobb .tpk-cta-title { font-size: calc(30px * var(--tpk-betu)); }
+
+.tpk-betu-kisebb .tpk-cta-subtitle,
+.tpk-betu-nagyobb .tpk-cta-subtitle { font-size: calc(15px * var(--tpk-betu)); }
+
+/* Hero főcím külön fokozat */
+.tpk-cim-kisebb  { --tpk-cim: .88; }
+.tpk-cim-nagyobb { --tpk-cim: 1.14; }
+
+.tpk-cim-kisebb .tpk-hero-title,
+.tpk-cim-nagyobb .tpk-hero-title { font-size: calc(56px * var(--tpk-cim)); }
+
+/* ── Hero kép-oldal váltó (kép balra) ── */
+.tpk-hero.tpk-kep-bal { flex-direction: row-reverse; }
+
+/* ── Egyéni háttérhez: szövegszín-kapcsoló ── */
+.tpk-szoveg-vilagos .tpk-section-title,
+.tpk-szoveg-vilagos .tpk-hero-title,
+.tpk-szoveg-vilagos .tpk-cta-title,
+.tpk-szoveg-vilagos .tpk-reason-title { color: #FFFFFF; }
+
+.tpk-szoveg-vilagos .tpk-eyebrow { color: var(--tpk-accent); }
+
+.tpk-szoveg-vilagos .tpk-hero-subtitle,
+.tpk-szoveg-vilagos .tpk-hero-note,
+.tpk-szoveg-vilagos .tpk-reason-text,
+.tpk-szoveg-vilagos .tpk-cta-subtitle,
+.tpk-szoveg-vilagos .tpk-section-link,
+.tpk-szoveg-vilagos .tpk-empty { color: rgba(255, 255, 255, .85); }
+
+.tpk-szoveg-sotet .tpk-section-title,
+.tpk-szoveg-sotet .tpk-hero-title,
+.tpk-szoveg-sotet .tpk-cta-title,
+.tpk-szoveg-sotet .tpk-reason-title,
+.tpk-szoveg-sotet .tpk-section-title--onDark { color: var(--tpk-text); }
+
+.tpk-szoveg-sotet .tpk-eyebrow,
+.tpk-szoveg-sotet .tpk-eyebrow--onDark { color: var(--tpk-secondary); }
+
+.tpk-szoveg-sotet .tpk-hero-subtitle,
+.tpk-szoveg-sotet .tpk-hero-note,
+.tpk-szoveg-sotet .tpk-reason-text,
+.tpk-szoveg-sotet .tpk-cta-subtitle,
+.tpk-szoveg-sotet .tpk-section-link,
+.tpk-szoveg-sotet .tpk-empty,
+.tpk-szoveg-sotet .tpk-empty--onDark { color: #5A5F66; }
+
+/* ── "Miért mi?" ikonok: beépített SVG-készlet (mask, márka-színre festve) + emoji ── */
+.tpk-ikon-svg {
+    display: block;
+    width: 26px;
+    height: 26px;
+    background: var(--tpk-dark);
+    -webkit-mask: var(--tpk-ikon) no-repeat center / contain;
+    mask: var(--tpk-ikon) no-repeat center / contain;
+}
+
+.tpk-ikon-emoji {
+    display: block;
+    font-size: 26px;
+    line-height: 1;
+}
+
+/* ── A fokozatok reszponzív felülírásai (a fő töréspontokkal összhangban) ── */
+@media (max-width: 1024px) {
+    .tpk-cim-kisebb .tpk-hero-title,
+    .tpk-cim-nagyobb .tpk-hero-title { font-size: calc(42px * var(--tpk-cim)); }
+}
+
+@media (max-width: 768px) {
+    .tpk-hero.tpk-kep-bal { flex-direction: column; }
+
+    .tpk-cim-kisebb .tpk-hero-title,
+    .tpk-cim-nagyobb .tpk-hero-title { font-size: calc(32px * var(--tpk-cim)); }
+
+    .tpk-betu-kisebb .tpk-hero-subtitle,
+    .tpk-betu-nagyobb .tpk-hero-subtitle { font-size: calc(16px * var(--tpk-betu)); }
+
+    .tpk-betu-kisebb .tpk-section-title,
+    .tpk-betu-nagyobb .tpk-section-title { font-size: calc(26px * var(--tpk-betu)); }
+
+    .tpk-betu-kisebb .tpk-cta-title,
+    .tpk-betu-nagyobb .tpk-cta-title { font-size: calc(24px * var(--tpk-betu)); }
+}
+
+@media (max-width: 400px) {
+    .tpk-cim-kisebb .tpk-hero-title,
+    .tpk-cim-nagyobb .tpk-hero-title { font-size: calc(27px * var(--tpk-cim)); }
+}

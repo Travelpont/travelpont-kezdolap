@@ -11,7 +11,7 @@ $tpk_orszagok = $tpk_kezi_idk ? tpk_get_orszagok( count( $tpk_kezi_idk ), $tpk_k
 $tpk_stilus   = tpk_megj( $tpk_b, 'stilus', 'magazin' );
 ?>
     <!-- ÚTICÉLOK -->
-    <section id="destinations" class="tpk-destinations<?php echo esc_attr( tpk_megj_osztalyok( 'uticelok', $tpk_b ) ); ?>">
+    <section id="destinations" class="tpk-destinations<?php echo esc_attr( tpk_megj_osztalyok( 'uticelok', $tpk_b ) ); ?>"<?php echo tpk_megj_stilus( $tpk_b ); ?>>
         <div class="tpk-section-head-centered">
             <p class="tpk-eyebrow tpk-eyebrow--onDark"><?php echo esc_html( $tpk_b['eyebrow'] ); ?></p>
             <h2 class="tpk-section-title tpk-section-title--onDark"><?php echo esc_html( $tpk_b['cim'] ); ?></h2>
