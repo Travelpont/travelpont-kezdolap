@@ -38,7 +38,7 @@ function tpk_render_nav() {
             <a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_utikalauz ); ?>">Útikalauz</a>
             <?php if ( $tpk_url_rolunk ) : ?><a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_rolunk ); ?>">Rólunk</a><?php endif; ?>
             <?php if ( $tpk_url_kapcsolat ) : ?><a class="tpk-nav-link" href="<?php echo esc_url( $tpk_url_kapcsolat ); ?>">Kapcsolat</a><?php endif; ?>
-            <a class="tpk-nav-cta" href="<?php echo esc_url( $tpk_url_ajanlatok ); ?>"><?php echo esc_html( apply_filters( 'tpk_nav_cta_szoveg', 'Ajánlatok böngészése' ) ); ?></a>
+            <a class="tpk-nav-cta" href="<?php echo esc_url( $tpk_url_ajanlatok ); ?>"><?php echo esc_html( apply_filters( 'tpk_nav_cta_szoveg', tpk_get_modulok()['chrome']['nav_cta_szoveg'] ) ); ?></a>
         </div>
     </nav>
     <?php

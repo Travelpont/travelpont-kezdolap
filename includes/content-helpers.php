@@ -11,7 +11,10 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // ── Kiemelt ajánlatok (max. 6, a lejártak nélkül) ─────────────────────────────
-function tpk_get_ajanlatok( $limit = 6 ) {
+// $ids megadásával (Portál "kézi kiválasztás") csak a felsorolt ajánlatok
+// jönnek, a megadott sorrendben – a lejárat-szűrő ekkor is érvényes, így a
+// kitűzött, de közben lejárt ajánlat automatikusan kimarad.
+function tpk_get_ajanlatok( $limit = 6, $ids = array() ) {
     if ( ! post_type_exists( 'ajanlat' ) ) return array();
 
     $args = array(
@@ -28,11 +31,20 @@ function tpk_get_ajanlatok( $limit = 6 ) {
         ),
     );
 
+    if ( ! empty( $ids ) ) {
+        $args['post__in'] = array_map( 'absint', (array) $ids );
+        $args['orderby']  = 'post__in';
+        unset( $args['order'] );
+    }
+
     return new WP_Query( apply_filters( 'tpk_ajanlatok_query_args', $args ) );
 }
 
 // ── Legfelső szintű Úticélok (országok) ───────────────────────────────────────
-function tpk_get_orszagok( $limit = 3 ) {
+// $ids megadásával (Portál "kézi kiválasztás") csak a felsorolt úticélok
+// jönnek, a megadott sorrendben – ilyenkor a legfelső-szint megkötés sem él,
+// tehát akár régió/város is kitűzhető.
+function tpk_get_orszagok( $limit = 3, $ids = array() ) {
     if ( ! post_type_exists( 'uticel' ) ) return array();
 
     $args = array(
@@ -43,6 +55,12 @@ function tpk_get_orszagok( $limit = 3 ) {
         'orderby'        => 'menu_order title',
         'order'          => 'ASC',
     );
+
+    if ( ! empty( $ids ) ) {
+        $args['post__in'] = array_map( 'absint', (array) $ids );
+        $args['orderby']  = 'post__in';
+        unset( $args['post_parent'], $args['order'] );
+    }
 
     return new WP_Query( apply_filters( 'tpk_orszagok_query_args', $args ) );
 }
@@ -98,25 +116,39 @@ function tpk_ajanlat_cimke( $post_id ) {
 
 // ── Al-oldalak URL-jei – ha a megfelelő Oldal még nincs létrehozva, a nav       ──
 // ── horgony-linkre esik vissza, hogy a plugin ne törjön el nélküle ────────────
+// (A modul-sablonok külön-külön hívják őket, ezért kérésen belül statikusan
+// gyorsítótárazottak – az oldal-feloldás csak egyszer fut le.)
 function tpk_ajanlatok_url() {
+    static $url = null;
+    if ( null !== $url ) return $url;
     $slug = apply_filters( 'tpk_ajanlatok_oldal_slug', 'ajanlatok' );
     $page = get_page_by_path( $slug );
-    return $page ? get_permalink( $page ) : '#offers';
+    $url  = $page ? get_permalink( $page ) : '#offers';
+    return $url;
 }
 
 function tpk_uticelok_url() {
+    static $url = null;
+    if ( null !== $url ) return $url;
     $slug = apply_filters( 'tpk_uticelok_oldal_slug', 'uticelok' );
     $page = get_page_by_path( $slug );
-    return $page ? get_permalink( $page ) : '#destinations';
+    $url  = $page ? get_permalink( $page ) : '#destinations';
+    return $url;
 }
 
 function tpk_utikalauz_url() {
+    static $url = null;
+    if ( null !== $url ) return $url;
     $page_for_posts = (int) get_option( 'page_for_posts' );
-    if ( $page_for_posts ) return get_permalink( $page_for_posts );
+    if ( $page_for_posts ) {
+        $url = get_permalink( $page_for_posts );
+        return $url;
+    }
 
     $slug = apply_filters( 'tpk_utikalauz_oldal_slug', 'utikalauz' );
     $page = get_page_by_path( $slug );
-    return $page ? get_permalink( $page ) : '#blog';
+    $url  = $page ? get_permalink( $page ) : '#blog';
+    return $url;
 }
 
 // ── Rólunk / Kapcsolat – nincs horgony-fallback rájuk, ha nincs oldal, nem      ──
@@ -133,14 +165,21 @@ function tpk_kapcsolat_url() {
     return $page ? get_permalink( $page ) : '';
 }
 
-// ── Márka-képek (Kezdőlap admin beállítás → Márka-képek) – ha nincs feltöltve, ─
-// ── üres string, a sablon a CSS-placeholderre esik vissza ─────────────────────
+// ── Márka-képek – a modul-konfigurációból (tpk_modulok, ill. amíg az nincs, ───
+// ── a régi tpk_settings migrált értékeiből); ha nincs feltöltve kép, üres ─────
+// ── string, a sablon a CSS-placeholderre esik vissza ──────────────────────────
 function tpk_logo_url() {
-    $id = (int) tpk_get_settings()['logo_kep_id'];
+    $id = (int) tpk_get_modulok()['chrome']['logo_kep_id'];
     return $id ? wp_get_attachment_image_url( $id, 'medium' ) : '';
 }
 
 function tpk_hero_kep_url() {
-    $id = (int) tpk_get_settings()['hero_kep_id'];
+    $id = 0;
+    foreach ( tpk_get_modulok()['modulok'] as $modul ) {
+        if ( 'hero' === $modul['tipus'] ) {
+            $id = (int) $modul['beallitasok']['hero_kep_id'];
+            break;
+        }
+    }
     return $id ? wp_get_attachment_image_url( $id, 'large' ) : '';
 }

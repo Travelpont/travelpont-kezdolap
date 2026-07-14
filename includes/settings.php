@@ -131,6 +131,11 @@ function tpk_render_settings_page() {
     ?>
     <div class="wrap">
         <h1>Kezdőlap beállításai</h1>
+        <?php if ( is_array( get_option( 'tpk_modulok' ) ) ) : ?>
+            <div class="notice notice-warning">
+                <p><strong>A kezdőlapot mostantól a Travelpont Portálban szerkesztheted</strong> (Kezdőlap menüpont). Mivel a Portálból már történt mentés, az itteni mezők <strong>nem hatnak</strong> a főoldalra – ez az oldal csak vésztartalékként maradt meg.</p>
+            </div>
+        <?php endif; ?>
         <p>Itt szerkesztheted a kezdőlap statikus szövegeit kód nélkül. Az elrendezés/design módosításához továbbra is a plugin kódjához kell nyúlni.</p>
         <form method="post" action="options.php">
             <?php settings_fields( 'tpk_settings_group' ); ?>
@@ -261,22 +266,9 @@ function tpk_render_settings_page() {
     <?php
 }
 
-// ── A meglévő tpk_* filterek kitöltése a mentett beállításokból ────────────
-add_filter( 'tpk_nav_cta_szoveg', function() { return tpk_get_settings()['nav_cta_szoveg']; } );
-add_filter( 'tpk_hero_badge_szoveg', function() { return tpk_get_settings()['hero_badge_szoveg']; } );
-add_filter( 'tpk_hero_cim', function() { return tpk_get_settings()['hero_cim']; } );
-add_filter( 'tpk_hero_alcim', function() { return tpk_get_settings()['hero_alcim']; } );
-add_filter( 'tpk_hero_cta_szoveg', function() { return tpk_get_settings()['hero_cta_szoveg']; } );
-add_filter( 'tpk_ajanlatok_ures_szoveg', function() { return tpk_get_settings()['ajanlatok_ures_szoveg']; } );
-add_filter( 'tpk_uticelok_ures_szoveg', function() { return tpk_get_settings()['uticelok_ures_szoveg']; } );
-add_filter( 'tpk_zaro_cta_cim', function() { return tpk_get_settings()['zaro_cta_cim']; } );
-add_filter( 'tpk_zaro_cta_alcim', function() { return tpk_get_settings()['zaro_cta_alcim']; } );
-add_filter( 'tpk_zaro_cta_gomb_szoveg', function() { return tpk_get_settings()['zaro_cta_gomb_szoveg']; } );
-add_filter( 'tpk_miert_mi_pontok', function() { return tpk_get_settings()['miert_mi']; } );
-add_filter( 'tpk_kozossegi_linkek', function() {
-    $s = tpk_get_settings();
-    return array(
-        'instagram' => $s['instagram_link'],
-        'facebook'  => $s['facebook_link'],
-    );
-} );
+// ── FONTOS (2026-07-14, modul-rendszer): a korábbi tpk_* filter-feliratkozások
+// innen KIVEZETVE. A sablonok mostantól közvetlenül a modul-konfigurációból
+// (tpk_get_modulok) olvasnak – amíg a Portálból nem mentettek (nincs
+// tpk_modulok opció), az itteni tpk_settings értékei migrált defaultként
+// érvényesülnek, tehát ez az oldal átmenetileg még hat. Ha a filter-blokk
+// visszakerülne, örökre felülírná a Portálból mentett értékeket!
