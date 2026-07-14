@@ -38,6 +38,7 @@ $tpk_ajanlatok = $tpk_kezi_idk ? tpk_get_ajanlatok( count( $tpk_kezi_idk ), $tpk
                     $tpk_datum    = implode( ' · ', $tpk_datum_reszek );
                     $tpk_cimke    = tpk_ajanlat_cimke( $tpk_id );
                     $tpk_repjegy  = tpa_mezo( $tpk_id, 'tpa_repjegy_ar' );
+                    $tpk_busz_ar  = tpa_mezo( $tpk_id, 'tpa_busz_ar' );
                     $tpk_szallas  = tpa_mezo( $tpk_id, 'tpa_szallas_ar' );
                     $tpk_osszesen = tpa_teljes_ar( $tpk_id );
                     ?>
@@ -56,6 +57,12 @@ $tpk_ajanlatok = $tpk_kezi_idk ? tpk_get_ajanlatok( count( $tpk_kezi_idk ), $tpk
                                     <div class="tpk-price-row">
                                         <span>✈ Repjegy (oda-vissza)</span>
                                         <span><?php echo esc_html( tpa_ar_format( $tpk_repjegy ) ); ?></span>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if ( $tpk_busz_ar !== '' ) : ?>
+                                    <div class="tpk-price-row">
+                                        <span>🚌 Buszjegy (oda-vissza)</span>
+                                        <span><?php echo esc_html( tpa_ar_format( $tpk_busz_ar ) ); ?></span>
                                     </div>
                                 <?php endif; ?>
                                 <?php if ( $tpk_szallas !== '' ) : ?>

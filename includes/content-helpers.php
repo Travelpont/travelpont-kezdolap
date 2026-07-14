@@ -88,7 +88,7 @@ function tpk_miert_mi_pontok() {
         ),
         array(
             'title' => 'Átlátható árbontás',
-            'text'  => 'Mindig külön látod a repjegy és a szállás árát – nincs elrejtett tétel.',
+            'text'  => 'Mindig külön látod az utazás és a szállás árát – nincs elrejtett tétel.',
             'ikon'  => 'square',
         ),
         array(

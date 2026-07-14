@@ -117,6 +117,15 @@ Travelpont Ajánlatok plugin `fields.php`-ja két új mezőt kapott:
 repjegy+szállás összegét adja vissza helyette. Részletek:
 `travelpont-ajanlatok/TRAVELPONT-AJANLATOK-DOCS.md`.
 
+## Kapcsolódó változás a Travelpont Ajánlatok pluginban (v1.9.0)
+
+Az Ajánlatok modul mostantól a repjegy-ár mellett a busz-árat
+(`tpa_busz_ar`) is soronként megjeleníti (🚌 Buszjegy), attól függően,
+melyik mező van kitöltve az ajánlatnál – csak szállás típusú ajánlatnál
+egyik sor sem jelenik meg. Nincs szükség modul-szerkezeti változásra,
+mert a kártya már eddig is érték-jelenlét alapján döntött soronként.
+Részletek: `travelpont-ajanlatok/TRAVELPONT-AJANLATOK-DOCS.md`.
+
 ## Al-oldalak linkjei (nav, "Összes ajánlat →" stb.)
 
 A weboldal végleges oldaltérképe (`_Dokumentumok\sitemap.md`) különálló
