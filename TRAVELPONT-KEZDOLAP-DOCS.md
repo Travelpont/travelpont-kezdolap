@@ -1,9 +1,18 @@
 # Travelpont Kezdőoldal plugin – dokumentáció
 
-> Verzió: 1.4.3 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
+> Verzió: 1.10.0 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
 > követi (`D:\travelpont.hu\_Saját_pluginek\`)
 > SZABÁLY: minden módosításkor verziót emelünk a fő fájl fejlécében
 > (cache-buster + követhetőség).
+>
+> **1.10.0**: az ajánlat-kártya ár-blokkja az Ajánlatok plugin 1.11.0-s
+> ár-kanonizálásához igazítva. A hibás „Összesen / fő" felirat helyett
+> „Összesen" + alatta a `tpa_ar_megjegyzes_megjelenites()` szövege (kézi
+> ár-megjegyzés, vagy típus szerinti alapszöveg – kanonikus értelmezés:
+> 2 fős csomagár). A szállás-ársor a szállás NEVÉT írja ki, ha meg van adva
+> (`tpa_szallas_nev`); az időpont/éjszakák a dátummezőkből levezetett
+> `tpa_idopont_megjelenites()` / `tpa_ejszakak_szam()` helperekből jönnek.
+> Új CSS: `.tpk-price-megjegyzes`.
 
 ## Mit tud?
 

@@ -30,8 +30,9 @@ $tpk_ajanlatok = $tpk_kezi_idk ? tpk_get_ajanlatok( count( $tpk_kezi_idk ), $tpk
                     $tpk_id       = get_the_ID();
                     $tpk_dest     = tpa_mezo( $tpk_id, 'tpa_celallomas' );
                     $tpk_dest     = $tpk_dest ? $tpk_dest : get_the_title();
-                    $tpk_idopont  = tpa_mezo( $tpk_id, 'tpa_idopont' );
-                    $tpk_ejszakak = tpa_mezo( $tpk_id, 'tpa_ejszakak' );
+                    $tpk_idopont  = tpa_idopont_megjelenites( $tpk_id ); // dátumokból képzett kiírás vagy kézi szöveg
+                    $tpk_ejszakak = tpa_ejszakak_szam( $tpk_id );        // dátumokból számolva vagy kézi érték
+                    $tpk_szallas_nev = tpa_mezo( $tpk_id, 'tpa_szallas_nev' );
                     $tpk_datum_reszek = array();
                     if ( $tpk_idopont !== '' ) $tpk_datum_reszek[] = $tpk_idopont;
                     if ( $tpk_ejszakak !== '' ) $tpk_datum_reszek[] = $tpk_ejszakak . ' éj';
@@ -67,16 +68,17 @@ $tpk_ajanlatok = $tpk_kezi_idk ? tpk_get_ajanlatok( count( $tpk_kezi_idk ), $tpk
                                 <?php endif; ?>
                                 <?php if ( $tpk_szallas !== '' ) : ?>
                                     <div class="tpk-price-row">
-                                        <span>🏨 Szállás<?php echo $tpk_ejszakak !== '' ? ' (' . esc_html( $tpk_ejszakak ) . ' éj)' : ''; ?></span>
+                                        <span>🏨 <?php echo $tpk_szallas_nev !== '' ? esc_html( $tpk_szallas_nev ) : 'Szállás'; ?><?php echo $tpk_ejszakak !== '' ? ' (' . esc_html( $tpk_ejszakak ) . ' éj)' : ''; ?></span>
                                         <span><?php echo esc_html( tpa_ar_format( $tpk_szallas ) ); ?></span>
                                     </div>
                                 <?php endif; ?>
                                 <?php if ( $tpk_osszesen !== '' ) : ?>
                                     <div class="tpk-price-divider"></div>
                                     <div class="tpk-price-row tpk-price-total">
-                                        <span>Összesen / fő</span>
+                                        <span>Összesen</span>
                                         <span><?php echo esc_html( tpa_ar_format( $tpk_osszesen ) ); ?></span>
                                     </div>
+                                    <p class="tpk-price-megjegyzes"><?php echo esc_html( tpa_ar_megjegyzes_megjelenites( $tpk_id ) ); ?></p>
                                 <?php endif; ?>
                             </div>
 

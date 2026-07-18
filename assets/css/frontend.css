@@ -454,6 +454,14 @@ body.tpk-managed-page {
     font-size: 15px;
 }
 
+/* Az "Összesen" sor alatti ár-értelmezés (pl. "2 fő, repülőjeggyel együtt") */
+.tpk-price-megjegyzes {
+    margin: 0;
+    font-size: 12px;
+    color: #7A7F87;
+    text-align: right;
+}
+
 .tpk-price-total span:first-child {
     color: var(--tpk-text);
     font-weight: 700;
