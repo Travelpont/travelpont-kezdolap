@@ -1,7 +1,11 @@
 # Travelpont Kezdőoldal plugin – dokumentáció
 
-> Verzió: 1.10.0 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
+> Verzió: 1.10.1 · A Travelpont Ajánlatok / Úticélok pluginek architektúráját
 > követi (`D:\travelpont.hu\_Saját_pluginek\`)
+> (1.10.1: az ajánlat-modul Összesen sora „Ft-tól" toldalékot kap az
+> Ajánlatok plugin v1.19.0 `tpa_osszeg_format()` helperével
+> [function_exists-védelemmel — régebbi Ajánlatok pluginnal sima ár marad].
+> A részár-sorok pontos árak maradnak.)
 > SZABÁLY: minden módosításkor verziót emelünk a fő fájl fejlécében
 > (cache-buster + követhetőség).
 >

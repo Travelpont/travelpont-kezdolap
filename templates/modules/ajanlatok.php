@@ -77,7 +77,8 @@ $tpk_ajanlatok = $tpk_kezi_idk ? tpk_get_ajanlatok( count( $tpk_kezi_idk ), $tpk
                                     <div class="tpk-price-divider"></div>
                                     <div class="tpk-price-row tpk-price-total">
                                         <span>Összesen</span>
-                                        <span><?php echo esc_html( tpa_ar_format( $tpk_osszesen ) ); ?></span>
+                                        <?php // "-tól" toldalék az Ajánlatok plugin v1.19+ helperével (régebbi pluginnal sima ár) ?>
+                                        <span><?php echo esc_html( function_exists( 'tpa_osszeg_format' ) ? tpa_osszeg_format( $tpk_id, $tpk_osszesen ) : tpa_ar_format( $tpk_osszesen ) ); ?></span>
                                     </div>
                                     <p class="tpk-price-megjegyzes"><?php echo esc_html( tpa_ar_megjegyzes_megjelenites( $tpk_id ) ); ?></p>
                                 <?php endif; ?>
