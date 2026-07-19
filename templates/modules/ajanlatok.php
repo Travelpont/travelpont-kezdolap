@@ -54,16 +54,17 @@ $tpk_ajanlatok = $tpk_kezi_idk ? tpk_get_ajanlatok( count( $tpk_kezi_idk ), $tpk
                             <?php if ( $tpk_datum !== '' ) : ?><p class="tpk-offer-dates"><?php echo esc_html( $tpk_datum ); ?></p><?php endif; ?>
 
                             <div class="tpk-offer-prices">
+                                <?php // A repjegy/buszjegy mező FŐNKÉNTI árat tárol (Ajánlatok plugin v1.14+) ?>
                                 <?php if ( $tpk_repjegy !== '' ) : ?>
                                     <div class="tpk-price-row">
                                         <span>✈ Repjegy (oda-vissza)</span>
-                                        <span><?php echo esc_html( tpa_ar_format( $tpk_repjegy ) ); ?></span>
+                                        <span><?php echo esc_html( tpa_ar_format( $tpk_repjegy ) ); ?>/fő</span>
                                     </div>
                                 <?php endif; ?>
                                 <?php if ( $tpk_busz_ar !== '' ) : ?>
                                     <div class="tpk-price-row">
                                         <span>🚌 Buszjegy (oda-vissza)</span>
-                                        <span><?php echo esc_html( tpa_ar_format( $tpk_busz_ar ) ); ?></span>
+                                        <span><?php echo esc_html( tpa_ar_format( $tpk_busz_ar ) ); ?>/fő</span>
                                     </div>
                                 <?php endif; ?>
                                 <?php if ( $tpk_szallas !== '' ) : ?>
